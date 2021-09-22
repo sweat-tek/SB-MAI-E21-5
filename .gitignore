@@ -1,3 +1,5 @@
 target/
 runner/
 FeatureTraces/
+nbactions.xml
+nb-configuration.xml
