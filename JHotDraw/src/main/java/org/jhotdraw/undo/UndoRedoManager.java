@@ -228,11 +228,7 @@ public class UndoRedoManager extends UndoManager {//javax.swing.undo.UndoManager
 
         undoAction.setEnabled(canUndo);
 
-        if (canUndo) {
-            label = getUndoPresentationName();
-        } else {
-            label = labels.getString("edit.undo.text");
-        }
+        label = getPresentationName(true, canUndo);
         undoAction.putValue(Action.NAME, label);
         undoAction.putValue(Action.SHORT_DESCRIPTION, label);
     
@@ -240,13 +236,22 @@ public class UndoRedoManager extends UndoManager {//javax.swing.undo.UndoManager
 
         redoAction.setEnabled(canRedo);
 
-        if (canRedo) {
-            label = getRedoPresentationName();
-        } else {
-            label = labels.getString("edit.redo.text");
-        }
+        label = getPresentationName(false, canUndo);
         redoAction.putValue(Action.NAME, label);
         redoAction.putValue(Action.SHORT_DESCRIPTION, label);
+    }
+
+    private synchronized String getPresentationName(boolean isUndo, boolean canAction) {
+        if (canAction) {
+            if (isUndo) {
+                return this.getUndoPresentationName();
+            } else {
+                return this.getRedoPresentationName();
+            }
+        }
+
+        String key = "edit." + (isUndo ? "undo" : "redo") + ".text";
+        return labels.getString(key);
     }
     
     /**
