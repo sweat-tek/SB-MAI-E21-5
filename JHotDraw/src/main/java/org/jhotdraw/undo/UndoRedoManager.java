@@ -223,21 +223,26 @@ public class UndoRedoManager extends UndoManager {//javax.swing.undo.UndoManager
         if (DEBUG) System.out.println("UndoManager.updateActions "+
                 editToBeUndone()
                 +" canUndo="+canUndo()+" canRedo="+canRedo());
-        if (canUndo()) {
-            undoAction.setEnabled(true);
+
+        boolean canUndo = this.canUndo();
+
+        undoAction.setEnabled(canUndo);
+
+        if (canUndo) {
             label = getUndoPresentationName();
         } else {
-            undoAction.setEnabled(false);
             label = labels.getString("edit.undo.text");
         }
         undoAction.putValue(Action.NAME, label);
         undoAction.putValue(Action.SHORT_DESCRIPTION, label);
-        
-        if (canRedo()) {
-            redoAction.setEnabled(true);
+    
+        boolean canRedo = this.canRedo();
+
+        redoAction.setEnabled(canRedo);
+
+        if (canRedo) {
             label = getRedoPresentationName();
         } else {
-            redoAction.setEnabled(false);
             label = labels.getString("edit.redo.text");
         }
         redoAction.putValue(Action.NAME, label);
