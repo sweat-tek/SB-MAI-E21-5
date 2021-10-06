@@ -219,30 +219,40 @@ public class UndoRedoManager extends UndoManager {//javax.swing.undo.UndoManager
      * and of the RedoAction.
      */
     private void updateActions() {
-        String label;
         if (DEBUG) System.out.println("UndoManager.updateActions "+
                 editToBeUndone()
                 +" canUndo="+canUndo()+" canRedo="+canRedo());
 
-        boolean canUndo = this.canUndo();
-
-        undoAction.setEnabled(canUndo);
-
-        label = getPresentationName(true, canUndo);
-        undoAction.putValue(Action.NAME, label);
-        undoAction.putValue(Action.SHORT_DESCRIPTION, label);
-    
-        boolean canRedo = this.canRedo();
-
-        redoAction.setEnabled(canRedo);
-
-        label = getPresentationName(false, canUndo);
-        redoAction.putValue(Action.NAME, label);
-        redoAction.putValue(Action.SHORT_DESCRIPTION, label);
+        updateAction(true);
+        updateAction(false);
     }
 
-    private synchronized String getPresentationName(boolean isUndo, boolean canAction) {
-        if (canAction) {
+    private void updateAction(boolean isUndo) {
+        AbstractAction action = getAction(isUndo);
+
+        String label = this.getPresentationName(isUndo);
+        action.putValue(Action.NAME, label);
+        action.putValue(Action.SHORT_DESCRIPTION, label);
+    }
+
+    private AbstractAction getAction(boolean isUndo) {
+        if (isUndo) {
+            return undoAction;
+        } else {
+            return redoAction;
+        }
+    }
+
+    private boolean canAction(boolean isUndo) {
+        if (isUndo) {
+            return canUndo();
+        } else {
+            return canRedo();
+        }
+    }
+
+    private synchronized String getPresentationName(boolean isUndo) {
+        if (canAction(isUndo)) {
             if (isUndo) {
                 return this.getUndoPresentationName();
             } else {
