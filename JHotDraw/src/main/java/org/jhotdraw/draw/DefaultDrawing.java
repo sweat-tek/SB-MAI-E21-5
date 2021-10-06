@@ -125,6 +125,7 @@ public class DefaultDrawing
         return null;
     }
 
+    // ToDo [aj] Smell = Write Code Once, QuadTreeDrawing class
     public Figure findFigureBehind(Point2D.Double p, Figure figure) {
         boolean isBehind = false;
         for (Figure f : getFiguresFrontToBack()) {
@@ -139,6 +140,7 @@ public class DefaultDrawing
         return null;
     }
 
+    // ToDo [aj] Smell = Write Code Once, QuadTreeDrawing class
     public Figure findFigureBehind(Point2D.Double p, Collection<? extends Figure> children) {
         int inFrontOf = children.size();
         for (Figure f : getFiguresFrontToBack()) {

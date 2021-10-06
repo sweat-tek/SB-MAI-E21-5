@@ -190,6 +190,7 @@ public class QuadTreeDrawing extends AbstractDrawing {
         }
     }
 
+    // ToDo [aj] Smell = Write Code Once, DefaultDrawing class
     public Figure findFigureBehind(Point2D.Double p, Figure figure) {
         boolean isBehind = false;
         for (Figure f : getFiguresFrontToBack()) {
@@ -204,6 +205,7 @@ public class QuadTreeDrawing extends AbstractDrawing {
         return null;
     }
 
+    // ToDo [aj] Smell = Write Code Once, DefaultDrawing class
     public Figure findFigureBehind(Point2D.Double p, Collection<? extends Figure> children) {
         int inFrontOf = children.size();
         for (Figure f : getFiguresFrontToBack()) {
@@ -247,6 +249,7 @@ public class QuadTreeDrawing extends AbstractDrawing {
         return contained;
     }
 
+    // ToDo [aj] Smell = Write Code Once, sendToBack method
     @Override
     @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
     public void bringToFront(Figure figure) {
@@ -257,6 +260,7 @@ public class QuadTreeDrawing extends AbstractDrawing {
         }
     }
 
+    // ToDo [aj] Smell = Write Code Once, bringToFront method
     @Override
     @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
     public void sendToBack(Figure figure) {

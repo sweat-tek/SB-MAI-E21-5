@@ -92,6 +92,7 @@ public class SVGEllipseFigure extends SVGAttributedFigure implements SVGFigure {
         return (Rectangle2D.Double) ellipse.getBounds2D();
     }
 
+    // ToDo [aj] Smell = Keep Unit Interfaces Small, 4 parameters
     @Override
     public Rectangle2D.Double getDrawingArea() {
         Rectangle2D rx = getTransformedShape().getBounds2D();

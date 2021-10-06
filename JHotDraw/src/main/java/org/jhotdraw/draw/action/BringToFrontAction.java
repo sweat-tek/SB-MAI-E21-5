@@ -30,6 +30,8 @@ import org.jhotdraw.draw.*;
  * for consistency with the API of Drawing. 
  * <br>1.0 24. November 2003  Created.
  */
+
+// ToDo [aj] Smell = Write Code Once, SendToBackAction class
 public class BringToFrontAction extends AbstractSelectedAction {
     
        public static String ID = "edit.bringToFront";
@@ -40,6 +42,7 @@ public class BringToFrontAction extends AbstractSelectedAction {
         labels.configureAction(this, ID);
     }
 
+    // ToDo [aj] Smell = Write Short Units of Code
     @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
     public void actionPerformed(java.awt.event.ActionEvent e) {
         final DrawingView view = getView();

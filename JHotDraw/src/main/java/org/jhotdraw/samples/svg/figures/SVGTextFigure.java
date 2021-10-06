@@ -110,6 +110,10 @@ public class SVGTextFigure
         }
         return (Rectangle2D.Double) cachedBounds.clone();
     }
+    
+    // ToDo [aj] Smell = Write Short Units of Code
+    // ToDo [aj] Smell = Write Simple Units of Code, BP = 5
+    // ToDo [aj] Smell = Keep Unit Interfaces Small, 4 parameters
     @Override public Rectangle2D.Double getDrawingArea() {
         if (cachedDrawingArea == null) {
             Rectangle2D rx = getBounds();

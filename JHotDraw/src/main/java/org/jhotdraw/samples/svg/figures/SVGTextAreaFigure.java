@@ -83,6 +83,8 @@ public class SVGTextAreaFigure extends SVGAttributedFigure
         return (Rectangle2D.Double) bounds.clone();
     }
 
+    // ToDo [aj] Smell = Write Simple Units of Code, BP = 5
+    // ToDo [aj] Smell = Keep Unit Interfaces Small, 4 parameters
     @Override
     public Rectangle2D.Double getDrawingArea() {
         if (cachedDrawingArea == null) {

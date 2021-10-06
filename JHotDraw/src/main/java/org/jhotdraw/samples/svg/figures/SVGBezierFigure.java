@@ -131,6 +131,9 @@ public class SVGBezierFigure extends BezierFigure {
         }
     }
 
+    // ToDo [aj] Smell = Write Short Units of Code
+    // ToDo [aj] Smell = Write Simple Units of Code, BP = 5
+    // ToDo [aj] Smell = Keep Unit Interfaces Small, 3 parameters
     public Rectangle2D.Double getDrawingArea() {
         if (cachedDrawingArea == null) {
             if (TRANSFORM.get(this) == null) {
