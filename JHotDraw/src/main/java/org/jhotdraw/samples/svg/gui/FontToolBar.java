@@ -19,6 +19,7 @@ import org.jhotdraw.util.*;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
+import static javax.swing.SwingConstants.SOUTH_EAST;
 import javax.swing.plaf.SliderUI;
 import org.jhotdraw.app.JHotDrawFeatures;
 import org.jhotdraw.draw.*;
@@ -70,7 +71,7 @@ public class FontToolBar extends AbstractToolBar {
 
     private SelectionComponentDisplayer createSelectionComponentDisplayer(DrawingEditor editor, JComponent component) {
         return new SelectionComponentDisplayer(editor, component) {
-            
+
             @Override
             public void updateVisibility() {
                 boolean newValue = editor != null
@@ -102,243 +103,191 @@ public class FontToolBar extends AbstractToolBar {
     protected JComponent createDisclosedComponent(int state) {
         JPanel p = null;
 
-        switch (state) {
-            case 1: {
-                p = new JPanel();
-                p.setOpaque(false);
-                p.setBorder(new EmptyBorder(5, 5, 5, 8));
+        if (state >= 1 && state <= 2) {
+            GridBagLayout layout = new GridBagLayout();
 
-                JPanel p1 = new JPanel(new GridBagLayout());
-                JPanel p2 = new JPanel(new GridBagLayout());
-                JPanel p3 = new JPanel(new GridBagLayout());
-                p1.setOpaque(false);
-                p2.setOpaque(false);
-                p3.setOpaque(false);
+            p = new JPanel();
+            p.setOpaque(false);
+            p.setBorder(new EmptyBorder(5, 5, 5, 8));
+            p.setLayout(layout);
 
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
+            ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
 
-                GridBagLayout layout = new GridBagLayout();
-                p.setLayout(layout);
+            drawFontChooser(p, labels, state);
 
-                GridBagConstraints gbc;
-                AbstractButton btn;
+            drawFontSizeComponent(p, labels);
 
-                // Font face field and popup button
-                JAttributeTextField<Font> faceField = new JAttributeTextField<Font>();
-                faceField.setColumns(2);
-                faceField.setToolTipText(labels.getString("attribute.font.toolTipText"));
-                faceField.setHorizontalAlignment(JAttributeTextField.RIGHT);
-                faceField.putClientProperty("Palette.Component.segmentPosition", "first");
-                faceField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(faceField));
-                faceField.setHorizontalAlignment(JTextField.LEADING);
-                faceField.setFormatterFactory(FontFormatter.createFormatterFactory());
-                new FigureAttributeEditorHandler<Font>(FONT_FACE, faceField, editor);
-                gbc = new GridBagConstraints();
-                gbc.gridx = 0;
-                gbc.gridy = 0;
-                gbc.insets = new Insets(0, 0, 0, 0);
-                gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                gbc.gridwidth = 2;
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                p.add(faceField, gbc);
-                btn = ButtonFactory.createFontButton(editor, labels);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                gbc = new GridBagConstraints();
-                gbc.gridwidth = GridBagConstraints.REMAINDER;
-                gbc.anchor = GridBagConstraints.WEST;
-                p.add(btn, gbc);
-
-                // Font size field with slider
-                JAttributeTextField<Double> sizeField = new JAttributeTextField<Double>();
-                sizeField.setColumns(1);
-                sizeField.setToolTipText(labels.getString("attribute.fontSize.toolTipText"));
-                sizeField.setHorizontalAlignment(JAttributeTextField.RIGHT);
-                sizeField.putClientProperty("Palette.Component.segmentPosition", "first");
-                sizeField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(sizeField));
-                sizeField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0d, 1000d, 1d));
-                sizeField.setHorizontalAlignment(JTextField.LEADING);
-                new FigureAttributeEditorHandler<Double>(FONT_SIZE, sizeField, editor);
-                gbc = new GridBagConstraints();
-                gbc.gridx = 0;
-                gbc.gridy = 1;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                gbc.gridwidth = 2;
-                gbc.weightx = 1f;
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                p2.add(sizeField, gbc);
-
-                JPopupButton sizePopupButton = new JPopupButton();
-                JAttributeSlider sizeSlider = new JAttributeSlider(JSlider.VERTICAL, 0, 100, 12);
-                sizePopupButton.add(sizeSlider);
-                labels.configureToolBarButton(sizePopupButton, "attribute.fontSize");
-                sizePopupButton.setUI((PaletteButtonUI) PaletteButtonUI.createUI(sizePopupButton));
-                sizePopupButton.setPopupAnchor(SOUTH_EAST);
-                new SelectionComponentRepainter(editor, sizePopupButton);
-                gbc = new GridBagConstraints();
-                gbc.gridx = 2;
-                gbc.gridy = 1;
-                gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                p2.add(sizePopupButton, gbc);
-                sizeSlider.setUI((SliderUI) PaletteSliderUI.createUI(sizeSlider));
-                sizeSlider.setScaleFactor(1d);
-                new FigureAttributeEditorHandler<Double>(FONT_SIZE, sizeSlider, editor);
-
-                gbc = new GridBagConstraints();
-                gbc.gridx = 0;
-                gbc.gridy = 1;
-                gbc.gridwidth = 2;
-                gbc.fill = GridBagConstraints.BOTH;
-                gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                gbc.insets = new Insets(0, 0, 0, 0);
-                p.add(p2, gbc);
-
-                // Font style buttons
-                btn = ButtonFactory.createFontStyleBoldButton(editor, labels);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                btn.putClientProperty("Palette.Component.segmentPosition", "first");
-                gbc = new GridBagConstraints();
-                gbc.gridy = 2;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                p.add(btn, gbc);
-                btn = ButtonFactory.createFontStyleItalicButton(editor, labels);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                btn.putClientProperty("Palette.Component.segmentPosition", "middle");
-                gbc = new GridBagConstraints();
-                gbc.gridy = 2;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                p.add(btn, gbc);
-                btn = ButtonFactory.createFontStyleUnderlineButton(editor, labels);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                btn.putClientProperty("Palette.Component.segmentPosition", "last");
-                gbc = new GridBagConstraints();
-                gbc.gridy = 2;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                gbc.anchor = GridBagConstraints.WEST;
-                p.add(btn, gbc);
-
-            }
-            break;
-            case 2: {
-                p = new JPanel();
-                p.setOpaque(false);
-                p.setBorder(new EmptyBorder(5, 5, 5, 8));
-
-                JPanel p1 = new JPanel(new GridBagLayout());
-                JPanel p2 = new JPanel(new GridBagLayout());
-                JPanel p3 = new JPanel(new GridBagLayout());
-                p1.setOpaque(false);
-                p2.setOpaque(false);
-                p3.setOpaque(false);
-
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
-
-                GridBagLayout layout = new GridBagLayout();
-                p.setLayout(layout);
-
-                GridBagConstraints gbc;
-                AbstractButton btn;
-
-                // Font face field and popup button
-                JAttributeTextField<Font> faceField = new JAttributeTextField<Font>();
-                faceField.setColumns(10);
-                faceField.setToolTipText(labels.getString("attribute.font.toolTipText"));
-                faceField.setHorizontalAlignment(JAttributeTextField.RIGHT);
-                faceField.putClientProperty("Palette.Component.segmentPosition", "first");
-                faceField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(faceField));
-                faceField.setHorizontalAlignment(JTextField.LEADING);
-                faceField.setFormatterFactory(FontFormatter.createFormatterFactory());
-                new FigureAttributeEditorHandler<Font>(FONT_FACE, faceField, editor);
-                gbc = new GridBagConstraints();
-                gbc.gridx = 0;
-                gbc.gridy = 0;
-                gbc.insets = new Insets(0, 0, 0, 0);
-                gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                gbc.gridwidth = 3;
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                p.add(faceField, gbc);
-                btn = ButtonFactory.createFontButton(editor, labels);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                gbc = new GridBagConstraints();
-                gbc.gridwidth = GridBagConstraints.REMAINDER;
-                gbc.anchor = GridBagConstraints.WEST;
-                p.add(btn, gbc);
-
-                // Font size field with slider
-                JAttributeTextField<Double> sizeField = new JAttributeTextField<Double>();
-                sizeField.setColumns(1);
-                sizeField.setToolTipText(labels.getString("attribute.fontSize.toolTipText"));
-                sizeField.setHorizontalAlignment(JAttributeTextField.RIGHT);
-                sizeField.putClientProperty("Palette.Component.segmentPosition", "first");
-                sizeField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(sizeField));
-                sizeField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0d, 1000d, 1d));
-                sizeField.setHorizontalAlignment(JTextField.LEADING);
-                new FigureAttributeEditorHandler<Double>(FONT_SIZE, sizeField, editor);
-                gbc = new GridBagConstraints();
-                gbc.gridx = 0;
-                gbc.gridy = 1;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                gbc.gridwidth = 2;
-                gbc.weightx = 1f;
-                gbc.fill = GridBagConstraints.HORIZONTAL;
-                p2.add(sizeField, gbc);
-
-                JPopupButton sizePopupButton = new JPopupButton();
-                JAttributeSlider sizeSlider = new JAttributeSlider(JSlider.VERTICAL, 0, 100, 12);
-                sizePopupButton.add(sizeSlider);
-                labels.configureToolBarButton(sizePopupButton, "attribute.fontSize");
-                sizePopupButton.setUI((PaletteButtonUI) PaletteButtonUI.createUI(sizePopupButton));
-                sizePopupButton.setPopupAnchor(SOUTH_EAST);
-                new SelectionComponentRepainter(editor, sizePopupButton);
-                gbc = new GridBagConstraints();
-                gbc.gridx = 2;
-                gbc.gridy = 1;
-                gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                p2.add(sizePopupButton, gbc);
-                sizeSlider.setUI((SliderUI) PaletteSliderUI.createUI(sizeSlider));
-                sizeSlider.setScaleFactor(1d);
-                new FigureAttributeEditorHandler<Double>(FONT_SIZE, sizeSlider, editor);
-
-                gbc = new GridBagConstraints();
-                gbc.gridx = 0;
-                gbc.gridy = 1;
-                gbc.gridwidth = 2;
-                gbc.fill = GridBagConstraints.BOTH;
-                gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                gbc.insets = new Insets(0, 0, 0, 0);
-                p.add(p2, gbc);
-
-                // Font style buttons
-                btn = ButtonFactory.createFontStyleBoldButton(editor, labels);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                btn.putClientProperty("Palette.Component.segmentPosition", "first");
-                gbc = new GridBagConstraints();
-                gbc.gridy = 2;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                p.add(btn, gbc);
-                btn = ButtonFactory.createFontStyleItalicButton(editor, labels);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                btn.putClientProperty("Palette.Component.segmentPosition", "middle");
-                gbc = new GridBagConstraints();
-                gbc.gridy = 2;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                p.add(btn, gbc);
-                btn = ButtonFactory.createFontStyleUnderlineButton(editor, labels);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                btn.putClientProperty("Palette.Component.segmentPosition", "last");
-                gbc = new GridBagConstraints();
-                gbc.gridy = 2;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                gbc.anchor = GridBagConstraints.WEST;
-                p.add(btn, gbc);
-
-            }
-            break;
+            drawButton(p, ButtonFactory.createFontStyleBoldButton(editor, labels), "first");
+            drawButton(p, ButtonFactory.createFontStyleItalicButton(editor, labels), "middle");
+            drawButton(p, ButtonFactory.createFontStyleUnderlineButton(editor, labels), "last");
         }
+
         return p;
+    }
+
+    /**
+     * Draw a slider for choosing the font size
+     *
+     * @param sizePanel
+     * @param labels
+     */
+    private void drawFontSizeSlider(JPanel sizePanel, ResourceBundleUtil labels) {
+
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JPopupButton sizePopupButton = new JPopupButton();
+        JAttributeSlider sizeSlider = new JAttributeSlider(JSlider.VERTICAL, 0, 100, 12);
+        sizePopupButton.add(sizeSlider);
+        labels.configureToolBarButton(sizePopupButton, "attribute.fontSize");
+        sizePopupButton.setUI((PaletteButtonUI) PaletteButtonUI.createUI(sizePopupButton));
+        sizePopupButton.setPopupAnchor(SOUTH_EAST);
+        new SelectionComponentRepainter(editor, sizePopupButton);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gbc.insets = new Insets(3, 0, 0, 0);
+        sizePanel.add(sizePopupButton, gbc);
+        sizeSlider.setUI((SliderUI) PaletteSliderUI.createUI(sizeSlider));
+        sizeSlider.setScaleFactor(1d);
+        new FigureAttributeEditorHandler<Double>(FONT_SIZE, sizeSlider, editor);
+
+    }
+
+    /**
+     * Creates a component with a font size field and slider
+     *
+     * @param parentPanel
+     * @param sizePanel
+     * @param labels
+     */
+    private void drawFontSizeComponent(JPanel parentPanel, ResourceBundleUtil labels) {
+
+        JPanel sizePanel = new JPanel(new GridBagLayout());
+        sizePanel.setOpaque(false);
+
+        drawFontSizeSlider(sizePanel, labels);
+        drawFontSizeField(sizePanel, labels);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gbc.insets = new Insets(0, 0, 0, 0);
+
+        parentPanel.add(sizePanel, gbc);
+    }
+
+    /**
+     * Creates an input field for the font size
+     *
+     * @param sizePanel
+     * @param labels
+     */
+    private void drawFontSizeField(JPanel sizePanel, ResourceBundleUtil labels) {
+
+        JAttributeTextField<Double> sizeField = new JAttributeTextField<Double>();
+        sizeField.setColumns(1);
+        sizeField.setToolTipText(labels.getString("attribute.fontSize.toolTipText"));
+        sizeField.setHorizontalAlignment(JAttributeTextField.RIGHT);
+        sizeField.putClientProperty("Palette.Component.segmentPosition", "first");
+        sizeField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(sizeField));
+        sizeField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0d, 1000d, 1d));
+        sizeField.setHorizontalAlignment(JTextField.LEADING);
+        new FigureAttributeEditorHandler<Double>(FONT_SIZE, sizeField, editor);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(3, 0, 0, 0);
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1f;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        sizePanel.add(sizeField, gbc);
+
+    }
+
+    /**
+     * Creates a button with specific constraints based on an abstract button
+     *
+     * @param panel
+     * @param btn
+     * @param clientProperty
+     */
+    private void drawButton(JPanel panel, AbstractButton btn, String clientProperty) {
+
+        btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
+        btn.putClientProperty("Palette.Component.segmentPosition", clientProperty);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = 2;
+        gbc.insets = new Insets(3, 0, 0, 0);
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(btn, gbc);
+    }
+
+    /**
+     * Creates a font chooser text field
+     *
+     * @param panel
+     * @param labels
+     * @param state
+     */
+    private void drawFontChooserField(JPanel panel, ResourceBundleUtil labels, int state) {
+
+        int[] columns = new int[]{0, 2, 10};
+        int[] gridWidth = new int[]{0, 2, 3};
+
+        JAttributeTextField<Font> faceField = new JAttributeTextField<>();
+        faceField.setColumns(columns[state]);
+        faceField.setToolTipText(labels.getString("attribute.font.toolTipText"));
+        faceField.setHorizontalAlignment(JAttributeTextField.RIGHT);
+        faceField.putClientProperty("Palette.Component.segmentPosition", "first");
+        faceField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(faceField));
+        faceField.setHorizontalAlignment(JTextField.LEADING);
+        faceField.setFormatterFactory(FontFormatter.createFormatterFactory());
+        new FigureAttributeEditorHandler<Font>(FONT_FACE, faceField, editor);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gbc.gridwidth = gridWidth[state];
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(faceField, gbc);
+    }
+
+    /**
+     * Creates a font chooser button
+     *
+     * @param panel
+     * @param labels
+     */
+    private void drawFontChooserButton(JPanel panel, ResourceBundleUtil labels) {
+
+        AbstractButton btn = ButtonFactory.createFontButton(editor, labels);
+        btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(btn, gbc);
+    }
+
+    /**
+     * Creates a font chooser field
+     *
+     * @param panel Panel to put the font chooser on
+     * @param labels Label resource for the tool tip
+     * @param columns Amount of columns in the font chooser field
+     * @param gridWidth Width of the grid in the constraints
+     */
+    private void drawFontChooser(JPanel panel, ResourceBundleUtil labels, int state) {
+
+        drawFontChooserField(panel, labels, state);
+        drawFontChooserButton(panel, labels);
+
     }
 
     @Override
