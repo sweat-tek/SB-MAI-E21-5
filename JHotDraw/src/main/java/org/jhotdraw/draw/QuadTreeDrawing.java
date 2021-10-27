@@ -216,24 +216,17 @@ public class QuadTreeDrawing extends AbstractDrawing {
         }
         return contained;
     }
-
-    // ToDo [aj] Smell = Write Code Once, sendToBack method
+    
     @Override
     @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
-    public void bringToFront(Figure figure) {
+    public void arrange(Figure figure, ArrangeLayer layer) {
         if (children.remove(figure)) {
-            children.add(figure);
-            needsSorting = true;
-            fireAreaInvalidated(figure.getDrawingArea());
-        }
-    }
-
-    // ToDo [aj] Smell = Write Code Once, bringToFront method
-    @Override
-    @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
-    public void sendToBack(Figure figure) {
-        if (children.remove(figure)) {
-            children.add(0, figure);
+            if (layer == ArrangeLayer.FRONT) {
+                children.add(figure);
+            }
+            else {
+                children.add(0, figure);
+            }            
             needsSorting = true;
             fireAreaInvalidated(figure.getDrawingArea());
         }

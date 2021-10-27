@@ -245,18 +245,12 @@ public interface Drawing extends CompositeFigure, Serializable, DOMStorable {
     Figure findFigureInside(Point2D.Double p);
     
     /**
-     * Sends a figure to the back of the drawing.
+     * Sends a figure to the front or back of the drawing.
      *
      * @param figure that is part of the drawing
+     * @param layer that the figure is moved to
      */
-    void sendToBack(Figure figure);
-    
-    /**
-     * Brings a figure to the front.
-     *
-     * @param figure that is part of the drawing
-     */
-    void bringToFront(Figure figure);
+    void arrange(Figure figure, ArrangeLayer layer);
     
     /**
      * Returns a copy of the provided collection which is sorted

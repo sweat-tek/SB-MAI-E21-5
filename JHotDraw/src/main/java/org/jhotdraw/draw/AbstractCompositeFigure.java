@@ -244,25 +244,19 @@ public abstract class AbstractCompositeFigure
     }
 
     /**
-     * Sends a figure to the back of the composite figure.
+     * Sends a figure to the front or back of the composite figure.
      *
      * @param figure that is part of this composite figure
+     * @param layer that the figure is moved to
      */
-    public synchronized void sendToBack(Figure figure) {
+    public synchronized void arrange(Figure figure, ArrangeLayer layer) {
         if (basicRemove(figure) != -1) {
-            basicAdd(0, figure);
-            fireAreaInvalidated(figure.getDrawingArea());
-        }
-    }
-
-    /**
-     * Sends a figure to the front of the drawing.
-     *
-     * @param figure that is part of the drawing
-     */
-    public synchronized void bringToFront(Figure figure) {
-        if (basicRemove(figure) != -1) {
-            basicAdd(figure);
+            if (layer == ArrangeLayer.FRONT) {
+                basicAdd(figure);
+            }
+            else {
+                basicAdd(0, figure);
+            }            
             fireAreaInvalidated(figure.getDrawingArea());
         }
     }
