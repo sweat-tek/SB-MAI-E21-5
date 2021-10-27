@@ -19,7 +19,6 @@ import org.jhotdraw.util.*;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
-import static javax.swing.SwingConstants.SOUTH_EAST;
 import javax.swing.plaf.SliderUI;
 import org.jhotdraw.app.JHotDrawFeatures;
 import org.jhotdraw.draw.*;
