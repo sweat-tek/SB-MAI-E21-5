@@ -1,5 +1,19 @@
+# Netbeans
+nbactions.xml
+nb-configuration.xml
+build/
+dist/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+
+# Maven
 target/
 runner/
 FeatureTraces/
-nbactions.xml
-nb-configuration.xml
