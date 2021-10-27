@@ -190,38 +190,6 @@ public class QuadTreeDrawing extends AbstractDrawing {
         }
     }
 
-    // ToDo [aj] Smell = Write Code Once, DefaultDrawing class
-    public Figure findFigureBehind(Point2D.Double p, Figure figure) {
-        boolean isBehind = false;
-        for (Figure f : getFiguresFrontToBack()) {
-            if (isBehind) {
-                if (f.isVisible() && f.contains(p)) {
-                    return f;
-                }
-            } else {
-                isBehind = figure == f;
-            }
-        }
-        return null;
-    }
-
-    // ToDo [aj] Smell = Write Code Once, DefaultDrawing class
-    public Figure findFigureBehind(Point2D.Double p, Collection<? extends Figure> children) {
-        int inFrontOf = children.size();
-        for (Figure f : getFiguresFrontToBack()) {
-            if (inFrontOf == 0) {
-                if (f.isVisible() && f.contains(p)) {
-                    return f;
-                }
-            } else {
-                if (children.contains(f)) {
-                    inFrontOf--;
-                }
-            }
-        }
-        return null;
-    }
-
     public java.util.List<Figure> findFigures(Rectangle2D.Double r) {
         LinkedList<Figure> c = new LinkedList<Figure>(quadTree.findIntersects(r));
         switch (c.size()) {
