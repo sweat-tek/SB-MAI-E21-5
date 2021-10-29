@@ -12,7 +12,6 @@ dist/
 # Mac
 .DS_Store
 
-
 # Maven
 target/
 runner/
