@@ -11,12 +11,9 @@
  * accordance with the license agreement you entered into with  
  * the copyright holders. For details see accompanying license terms. 
  */
-
 package org.jhotdraw.draw.action;
 
 import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
-import org.jhotdraw.util.*;
-import javax.swing.*;
 import java.util.*;
 import javax.swing.undo.*;
 import org.jhotdraw.app.JHotDrawFeatures;
@@ -25,52 +22,87 @@ import org.jhotdraw.draw.*;
 /**
  * SendToBackAction.
  *
- * @author  Werner Randelshofer
- * @version 2.0 2008-05-30 Renamed from MoveToBackAction to SendToBackAction
- * for consistency with the API of Drawing.
- * <br>1.0 24. November 2003  Created.
+ * @author Werner Randelshofer
+ * @version 2.0 2008-05-30 Renamed from MoveToBackAction to SendToBackAction for
+ * consistency with the API of Drawing.
+ * <br>1.0 24. November 2003 Created.
  */
-
-// ToDo [aj] Smell = Write Code Once, BringToFrontAction class
 public class SendToBackAction extends AbstractSelectedAction {
-    
-       public static String ID = "edit.sendToBack";
-    /** Creates a new instance. */
+
+    public static String ID = "edit.sendToBack";
+    private ArrangeLayer direction;
+
+    /**
+     * Creates a new instance.
+     */
     public SendToBackAction(DrawingEditor editor) {
+        this(editor, ArrangeLayer.BACK);
+    }
+
+    public SendToBackAction(DrawingEditor editor, ArrangeLayer direction) {
         super(editor);
+        this.direction = direction;
         labels.configureAction(this, ID);
     }
 
-    // ToDo [aj] Smell = Write Short Units of Code
     @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
     public void actionPerformed(java.awt.event.ActionEvent e) {
-        final DrawingView view = getView();
-        final LinkedList<Figure> figures = new LinkedList<Figure>(view.getSelectedFigures());
-        sendToBack(view, figures);
-        fireUndoableEditHappened(new AbstractUndoableEdit() {
+        final DrawingView view = getView(); 
+
+        arrange(view, direction);
+        ArrangeStrategy strategy = null;
+
+        if (direction == ArrangeLayer.BACK) {
+            strategy = new ArrangeStrategy(ArrangeLayer.BACK, ArrangeLayer.FRONT);
+        } else {
+            strategy = new ArrangeStrategy(ArrangeLayer.FRONT, ArrangeLayer.BACK);
+        }
+
+        if (strategy != null) {
+            UndoableEdit edit = undoableAction(view, strategy);
+            fireUndoableEditHappened(edit);
+        }
+    }
+
+    // ToDo [aj] Smell = Write Short Units of Code
+    private UndoableEdit undoableAction(final DrawingView view, ArrangeStrategy strategy) {
+        return new AbstractUndoableEdit() {
             @Override
             public String getPresentationName() {
-       return labels.getTextProperty(ID);
+                return labels.getTextProperty(ID);
             }
+
             @Override
             public void redo() throws CannotRedoException {
                 super.redo();
-                SendToBackAction.sendToBack(view, figures);
+                SendToBackAction.arrange(view, strategy.redo);
             }
+
             @Override
             public void undo() throws CannotUndoException {
                 super.undo();
-                BringToFrontAction.bringToFront(view, figures);
+                BringToFrontAction.arrange(view, strategy.undo);
             }
-        }
-        );
+        };
     }
-    public static void sendToBack(DrawingView view, Collection figures) {
+
+    public static void arrange(DrawingView view, ArrangeLayer direction) {
+        LinkedList<Figure> figures = new LinkedList<Figure>(view.getSelectedFigures());
         Iterator i = figures.iterator();
         Drawing drawing = view.getDrawing();
         while (i.hasNext()) {
             Figure figure = (Figure) i.next();
-            drawing.sendToBack(figure);
+            drawing.arrange(figure, direction);
+        }
+    }
+    
+    public class ArrangeStrategy {
+        private ArrangeLayer redo;
+        private ArrangeLayer undo;
+        
+        public ArrangeStrategy(ArrangeLayer redo, ArrangeLayer undo) {
+            this.redo = redo;
+            this.undo = undo;
         }
     }
 }
