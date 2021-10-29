@@ -47,9 +47,9 @@ public class SendToBackAction extends AbstractSelectedAction {
 
     @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
     public void actionPerformed(java.awt.event.ActionEvent e) {
-        final DrawingView view = getView(); 
+        ArrangeModel model = new ArrangeModel(getView());
 
-        arrange(view, direction);
+        arrange(model, direction);
         ArrangeStrategy strategy = null;
 
         if (direction == ArrangeLayer.BACK) {
@@ -58,14 +58,12 @@ public class SendToBackAction extends AbstractSelectedAction {
             strategy = new ArrangeStrategy(ArrangeLayer.FRONT, ArrangeLayer.BACK);
         }
 
-        if (strategy != null) {
-            UndoableEdit edit = undoableAction(view, strategy);
-            fireUndoableEditHappened(edit);
-        }
+        UndoableEdit edit = undoableAction(model, strategy);
+        fireUndoableEditHappened(edit);
     }
 
     // ToDo [aj] Smell = Write Short Units of Code
-    private UndoableEdit undoableAction(final DrawingView view, ArrangeStrategy strategy) {
+    private UndoableEdit undoableAction(ArrangeModel model, ArrangeStrategy strategy) {
         return new AbstractUndoableEdit() {
             @Override
             public String getPresentationName() {
@@ -75,31 +73,42 @@ public class SendToBackAction extends AbstractSelectedAction {
             @Override
             public void redo() throws CannotRedoException {
                 super.redo();
-                SendToBackAction.arrange(view, strategy.redo);
+                SendToBackAction.arrange(model, strategy.redo);
             }
 
             @Override
             public void undo() throws CannotUndoException {
                 super.undo();
-                BringToFrontAction.arrange(view, strategy.undo);
+                BringToFrontAction.arrange(model, strategy.undo);
             }
         };
     }
 
-    public static void arrange(DrawingView view, ArrangeLayer direction) {
-        LinkedList<Figure> figures = new LinkedList<Figure>(view.getSelectedFigures());
-        Iterator i = figures.iterator();
-        Drawing drawing = view.getDrawing();
+    public static void arrange(ArrangeModel model, ArrangeLayer direction) {
+        Iterator i = model.figures.iterator();
+        Drawing drawing = model.view.getDrawing();
         while (i.hasNext()) {
             Figure figure = (Figure) i.next();
             drawing.arrange(figure, direction);
         }
     }
-    
+
+    public class ArrangeModel {
+
+        private final DrawingView view;
+        private final LinkedList<Figure> figures;
+
+        public ArrangeModel(final DrawingView view) {
+            this.view = view;
+            this.figures = new LinkedList<Figure>(view.getSelectedFigures());
+        }
+    }
+
     public class ArrangeStrategy {
+
         private ArrangeLayer redo;
         private ArrangeLayer undo;
-        
+
         public ArrangeStrategy(ArrangeLayer redo, ArrangeLayer undo) {
             this.redo = redo;
             this.undo = undo;
