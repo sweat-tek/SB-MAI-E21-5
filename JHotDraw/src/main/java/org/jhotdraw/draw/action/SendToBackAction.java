@@ -37,12 +37,12 @@ public class SendToBackAction extends AbstractSelectedAction {
      */
     public SendToBackAction(DrawingEditor editor) {
         this(editor, ArrangeLayer.BACK);
+        labels.configureAction(this, ID);
     }
 
     public SendToBackAction(DrawingEditor editor, ArrangeLayer direction) {
         super(editor);
         this.direction = direction;
-        labels.configureAction(this, ID);
     }
 
     @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
