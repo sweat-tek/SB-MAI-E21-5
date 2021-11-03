@@ -12,7 +12,7 @@ import org.jhotdraw.draw.action.AbstractSelectedAction;
 public abstract class ArrangeAction extends AbstractSelectedAction {
 
     public String ID;
-    private ArrangeLayer direction;
+    public ArrangeLayer direction;
 
     /**
      * Creates a new instance.
@@ -28,7 +28,7 @@ public abstract class ArrangeAction extends AbstractSelectedAction {
         ArrangeModel model = new ArrangeModel(getView());
 
         arrange(model, direction);
-        ArrangeStrategy strategy = null;
+        ArrangeStrategy strategy;
 
         if (direction == ArrangeLayer.BACK) {
             strategy = new ArrangeStrategy(ArrangeLayer.BACK, ArrangeLayer.FRONT);
@@ -51,13 +51,13 @@ public abstract class ArrangeAction extends AbstractSelectedAction {
             @Override
             public void redo() throws CannotRedoException {
                 super.redo();
-                SendToBackAction.arrange(model, strategy.redo);
+                arrange(model, strategy.redo);
             }
 
             @Override
             public void undo() throws CannotUndoException {
                 super.undo();
-                BringToFrontAction.arrange(model, strategy.undo);
+                arrange(model, strategy.undo);
             }
         };
     }
