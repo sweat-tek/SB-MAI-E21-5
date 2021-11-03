@@ -13,6 +13,8 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
+import org.jhotdraw.draw.action.arrange.BringToFrontAction;
+import org.jhotdraw.draw.action.arrange.SendToBackAction;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
