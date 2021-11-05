@@ -1283,13 +1283,9 @@ public class ButtonFactory {
         return createFontButton(editor, FONT_FACE, labels);
     }
 
-    public static JPopupButton createFontButton(DrawingEditor editor,
-            AttributeKey<Font> key,
-            ResourceBundleUtil labels) {
+    public static JPopupButton createFontButton(DrawingEditor editor, AttributeKey<Font> key, ResourceBundleUtil labels) {
 
-        JPopupButton fontPopupButton;
-
-        fontPopupButton = new JPopupButton();
+        JPopupButton fontPopupButton = new JPopupButton();
 
         labels.configureToolBarButton(fontPopupButton, "attribute.font");
         fontPopupButton.setFocusable(false);
