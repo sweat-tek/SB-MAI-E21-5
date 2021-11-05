@@ -57,7 +57,7 @@ public class FontChooserHandler extends AbstractSelectedAction
         }
         popupMenu.setVisible(false);
     }
-
+    
     protected void applySelectedFontToFigures() {
         final ArrayList<Figure> selectedFigures = new ArrayList<Figure>(getView().getSelectedFigures());
         final ArrayList<Object> restoreData = new ArrayList<Object>(selectedFigures.size());
