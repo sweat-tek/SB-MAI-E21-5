@@ -112,25 +112,25 @@ public class FontToolBar extends AbstractToolBar {
 
             ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
 
-            drawFontChooser(p, labels, state);
+            createFontChooserComponent(p, labels, state);
 
-            drawFontSizeComponent(p, labels);
+            createFontSizeComponent(p, labels);
 
-            drawButton(p, ButtonFactory.createFontStyleBoldButton(editor, labels), "first");
-            drawButton(p, ButtonFactory.createFontStyleItalicButton(editor, labels), "middle");
-            drawButton(p, ButtonFactory.createFontStyleUnderlineButton(editor, labels), "last");
+            createFontStyleButton(p, ButtonFactory.createFontStyleBoldButton(editor, labels), "first");
+            createFontStyleButton(p, ButtonFactory.createFontStyleItalicButton(editor, labels), "middle");
+            createFontStyleButton(p, ButtonFactory.createFontStyleUnderlineButton(editor, labels), "last");
         }
 
         return p;
     }
 
     /**
-     * Draw a slider for choosing the font size
+     * Create a slider for choosing the font size
      *
      * @param sizePanel
      * @param labels
      */
-    private void drawFontSizeSlider(JPanel sizePanel, ResourceBundleUtil labels) {
+    private void createFontSizeSlider(JPanel sizePanel, ResourceBundleUtil labels) {
 
         JPopupButton sizePopupButton = new JPopupButton();
         JAttributeSlider sizeSlider = new JAttributeSlider(JSlider.VERTICAL, 0, 100, 12);
@@ -148,33 +148,6 @@ public class FontToolBar extends AbstractToolBar {
         sizeSlider.setUI((SliderUI) PaletteSliderUI.createUI(sizeSlider));
         sizeSlider.setScaleFactor(1d);
         new FigureAttributeEditorHandler<Double>(FONT_SIZE, sizeSlider, editor);
-
-    }
-
-    /**
-     * Creates a component with a font size field and slider
-     *
-     * @param parentPanel
-     * @param sizePanel
-     * @param labels
-     */
-    private void drawFontSizeComponent(JPanel parentPanel, ResourceBundleUtil labels) {
-
-        JPanel sizePanel = new JPanel(new GridBagLayout());
-        sizePanel.setOpaque(false);
-
-        drawFontSizeSlider(sizePanel, labels);
-        drawFontSizeField(sizePanel, labels);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gbc.insets = new Insets(0, 0, 0, 0);
-
-        parentPanel.add(sizePanel, gbc);
     }
 
     /**
@@ -183,7 +156,7 @@ public class FontToolBar extends AbstractToolBar {
      * @param sizePanel
      * @param labels
      */
-    private void drawFontSizeField(JPanel sizePanel, ResourceBundleUtil labels) {
+    private void createFontSizeField(JPanel sizePanel, ResourceBundleUtil labels) {
 
         JAttributeTextField<Double> sizeField = new JAttributeTextField<Double>();
         sizeField.setColumns(1);
@@ -203,25 +176,32 @@ public class FontToolBar extends AbstractToolBar {
         gbc.weightx = 1f;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         sizePanel.add(sizeField, gbc);
-
     }
 
     /**
-     * Creates a button with specific constraints based on an abstract button
+     * Creates a component with a font size field and slider
      *
-     * @param panel
-     * @param btn
-     * @param clientProperty
+     * @param parentPanel
+     * @param sizePanel
+     * @param labels
      */
-    private void drawButton(JPanel panel, AbstractButton btn, String clientProperty) {
+    private void createFontSizeComponent(JPanel parentPanel, ResourceBundleUtil labels) {
 
-        btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-        btn.putClientProperty("Palette.Component.segmentPosition", clientProperty);
+        JPanel sizePanel = new JPanel(new GridBagLayout());
+        sizePanel.setOpaque(false);
+
+        createFontSizeSlider(sizePanel, labels);
+        createFontSizeField(sizePanel, labels);
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridy = 2;
-        gbc.insets = new Insets(3, 0, 0, 0);
-        gbc.anchor = GridBagConstraints.WEST;
-        panel.add(btn, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gbc.insets = new Insets(0, 0, 0, 0);
+
+        parentPanel.add(sizePanel, gbc);
     }
 
     /**
@@ -231,7 +211,7 @@ public class FontToolBar extends AbstractToolBar {
      * @param labels
      * @param state
      */
-    private void drawFontChooserField(JPanel panel, ResourceBundleUtil labels, int state) {
+    private void createFontChooserField(JPanel panel, ResourceBundleUtil labels, int state) {
 
         int[] columns = new int[]{0, 2, 10};
         int[] gridWidth = new int[]{0, 2, 3};
@@ -262,7 +242,7 @@ public class FontToolBar extends AbstractToolBar {
      * @param panel
      * @param labels
      */
-    private void drawFontChooserButton(JPanel panel, ResourceBundleUtil labels) {
+    private void createFontChooserButton(JPanel panel, ResourceBundleUtil labels) {
 
         AbstractButton btn = ButtonFactory.createFontButton(editor, labels);
         btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
@@ -280,11 +260,28 @@ public class FontToolBar extends AbstractToolBar {
      * @param columns Amount of columns in the font chooser field
      * @param gridWidth Width of the grid in the constraints
      */
-    private void drawFontChooser(JPanel panel, ResourceBundleUtil labels, int state) {
+    private void createFontChooserComponent(JPanel panel, ResourceBundleUtil labels, int state) {
 
-        drawFontChooserField(panel, labels, state);
-        drawFontChooserButton(panel, labels);
+        createFontChooserField(panel, labels, state);
+        createFontChooserButton(panel, labels);
+    }
 
+    /**
+     * Creates a button with specific constraints based on an abstract button
+     *
+     * @param panel
+     * @param btn
+     * @param clientProperty
+     */
+    private void createFontStyleButton(JPanel panel, AbstractButton btn, String clientProperty) {
+
+        btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
+        btn.putClientProperty("Palette.Component.segmentPosition", clientProperty);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = 2;
+        gbc.insets = new Insets(3, 0, 0, 0);
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(btn, gbc);
     }
 
     @Override
