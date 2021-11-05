@@ -132,8 +132,6 @@ public class FontToolBar extends AbstractToolBar {
      */
     private void drawFontSizeSlider(JPanel sizePanel, ResourceBundleUtil labels) {
 
-        GridBagConstraints gbc = new GridBagConstraints();
-
         JPopupButton sizePopupButton = new JPopupButton();
         JAttributeSlider sizeSlider = new JAttributeSlider(JSlider.VERTICAL, 0, 100, 12);
         sizePopupButton.add(sizeSlider);
@@ -141,7 +139,7 @@ public class FontToolBar extends AbstractToolBar {
         sizePopupButton.setUI((PaletteButtonUI) PaletteButtonUI.createUI(sizePopupButton));
         sizePopupButton.setPopupAnchor(SOUTH_EAST);
         new SelectionComponentRepainter(editor, sizePopupButton);
-        gbc = new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
