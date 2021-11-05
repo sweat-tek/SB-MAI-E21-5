@@ -84,6 +84,12 @@ public class FontToolBar extends AbstractToolBar {
         };
     }
 
+    /**
+     * Checks if a collection of figures contain a TextHolderFigure
+     * 
+     * @param figures a collection of figures
+     * @return true or false depending on, if one of the figures is an instance of TextHolderFigure
+     */
     private boolean containsTextHolderFigure(Collection<Figure> figures) {
         for (Figure f : figures) {
             if (f instanceof TextHolderFigure) {
@@ -97,6 +103,12 @@ public class FontToolBar extends AbstractToolBar {
         return false;
     }
 
+    /**
+     * Creates the palette tool component in the tool bar
+     * 
+     * @param state the open-close state of the component (0 = close, 1 = compact 2 = full)
+     * @return the JComponent of the font palette bar component
+     */
     @Override
     @FeatureEntryPoint(JHotDrawFeatures.FONT_PALETTE)
     protected JComponent createDisclosedComponent(int state) {
@@ -127,8 +139,8 @@ public class FontToolBar extends AbstractToolBar {
     /**
      * Create a slider for choosing the font size
      *
-     * @param sizePanel
-     * @param labels
+     * @param sizePanel the panel which the font size slider should be added to
+     * @param labels the labels used to display the attribute
      */
     private void createFontSizeSlider(JPanel sizePanel, ResourceBundleUtil labels) {
 
@@ -153,8 +165,8 @@ public class FontToolBar extends AbstractToolBar {
     /**
      * Creates an input field for the font size
      *
-     * @param sizePanel
-     * @param labels
+     * @param sizePanel the panel which the font size slider should be added to
+     * @param labels the labels used to display the attribute
      */
     private void createFontSizeField(JPanel sizePanel, ResourceBundleUtil labels) {
 
@@ -181,9 +193,8 @@ public class FontToolBar extends AbstractToolBar {
     /**
      * Creates a component with a font size field and slider
      *
-     * @param parentPanel
-     * @param sizePanel
-     * @param labels
+     * @param parentPanel the panel which the font size slider should be added to
+     * @param labels the labels used to display the attribute
      */
     private void createFontSizeComponent(JPanel parentPanel, ResourceBundleUtil labels) {
 
@@ -207,9 +218,9 @@ public class FontToolBar extends AbstractToolBar {
     /**
      * Creates a font chooser text field
      *
-     * @param panel
-     * @param labels
-     * @param state
+     * @param panel the panel which the font size slider should be added to
+     * @param labels the labels used to display the attribute
+     * @param state the open-close state of the component (0 = close, 1 = compact 2 = full)
      */
     private void createFontChooserField(JPanel panel, ResourceBundleUtil labels, int state) {
 
@@ -239,8 +250,8 @@ public class FontToolBar extends AbstractToolBar {
     /**
      * Creates a font chooser button
      *
-     * @param panel
-     * @param labels
+     * @param panel the panel which the font size slider should be added to
+     * @param labels the labels used to display the attribute
      */
     private void createFontChooserButton(JPanel panel, ResourceBundleUtil labels) {
 
@@ -269,9 +280,9 @@ public class FontToolBar extends AbstractToolBar {
     /**
      * Creates a button with specific constraints based on an abstract button
      *
-     * @param panel
-     * @param btn
-     * @param clientProperty
+     * @param panel panel to put the font chooser on
+     * @param btn the button type, e.g. bold, italic, underline
+     * @param clientProperty the order of the button in the panel e.g. first, middle, last
      */
     private void createFontStyleButton(JPanel panel, AbstractButton btn, String clientProperty) {
 
