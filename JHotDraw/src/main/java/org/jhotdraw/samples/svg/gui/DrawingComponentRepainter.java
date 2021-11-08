@@ -28,64 +28,11 @@ import org.jhotdraw.draw.*;
 
 // Implements AbstractComponentRepainter interface since a lot of the methods
 // for DrawingComponentRepainter & SelectionComponentRepainter are the same
-public class DrawingComponentRepainter extends FigureAdapter
-        implements AbstractComponentRepainter {
-
-    private DrawingEditor editor;
-    private JComponent component;
+public class DrawingComponentRepainter extends AbstractComponentRepainter {
 
     // Constructor uses addListeners to reduce the code
     public DrawingComponentRepainter(DrawingEditor editor, JComponent component) {
-        this.editor = editor;
-        this.component = component;
-        if (editor != null) {
-            if (editor.getActiveView() != null) {
-                DrawingView view = editor.getActiveView();
-                this.addListeners(view);
-            }
-
-            editor.addPropertyChangeListener(this);
-        }
-    }
-
-    @Override
-    public void attributeChanged(FigureEvent evt) {
-        component.repaint();
-    }
-
-    /**
-     * Rewrote the propertyChange() to use the 
-     * activeViewPropertyChangedHandler() or the drawingPropertyChangedHandler()
-     * depending on if the propertyName hits the Active View or the DrawingView
-     * @param evt A PropertyChangeEvent object describing the event source and 
-     * the property that has changed to determine if the method executes the logic
-     * for activeViewPropertyChangedHandler() or 
-     * drawingPropertyChangedHandler()
-     */
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        String name = evt.getPropertyName();
-        
-        if (name == DrawingEditor.ACTIVE_VIEW_PROPERTY) {
-            this.activeViewPropertyChangedHandler(evt);
-        } else if (name == DrawingView.DRAWING_PROPERTY) {
-            this.drawingPropertyChangedHandler(evt);
-        } else {
-            component.repaint();
-        }
-    }
-
-    // Write method to remove Listeners
-    public void dispose() {
-        if (editor != null) {
-            if (editor.getActiveView() != null) {
-                DrawingView view = editor.getActiveView();
-                this.removeListeners(view);
-            }
-            editor.removePropertyChangeListener(this);
-            editor = null;
-        }
-        component = null;
+        super(editor, component);
     }
 
     /**
