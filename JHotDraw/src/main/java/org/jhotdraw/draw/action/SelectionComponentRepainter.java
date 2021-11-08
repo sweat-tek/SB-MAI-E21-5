@@ -13,10 +13,8 @@
  */
 package org.jhotdraw.draw.action;
 
-import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import java.beans.*;
 import javax.swing.*;
-import org.jhotdraw.app.JHotDrawFeatures;
 import org.jhotdraw.draw.*;
 
 /**
@@ -29,12 +27,12 @@ import org.jhotdraw.draw.*;
 
 // The class is similar to the DrawingComponentPainter - Duplicate code
 public class SelectionComponentRepainter extends FigureAdapter
-        implements PropertyChangeListener, FigureSelectionListener {
+        implements FigureSelectionListener, AbstractComponentRepainter {
 
     private DrawingEditor editor;
     private JComponent component;
-
-    // Constructor rewritten to use addListeners
+    
+    // Constructor uses addListeners to reduce the code
     public SelectionComponentRepainter(DrawingEditor editor, JComponent component) {
         this.editor = editor;
         this.component = component;
@@ -56,10 +54,12 @@ public class SelectionComponentRepainter extends FigureAdapter
      * Rewrote the propertyChange() to use the 
      * activeViewPropertyChangedHandler() or the drawingPropertyChangedHandler()
      * depending on if the propertyName hits the Active View or the DrawingView
-     * @param evt the propertyName to determine if the method executes the logic
+     * @param evt A PropertyChangeEvent object describing the event source and 
+     * the property that has changed to determine if the method executes the logic
      * for activeViewPropertyChangedHandler() or 
      * drawingPropertyChangedHandler()
      */
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String name = evt.getPropertyName();
         
@@ -72,11 +72,13 @@ public class SelectionComponentRepainter extends FigureAdapter
         }
     }
 
+    @Override
     public void selectionChanged(FigureSelectionEvent evt) {
         component.repaint();
     }
 
     // Used removeListeners to reduce the code 
+    @Override
     public void dispose() {
         if (editor != null) {
             if (editor.getActiveView() != null) {
@@ -91,9 +93,10 @@ public class SelectionComponentRepainter extends FigureAdapter
     
     /**
      * Adds the listeners
-     * @param view the DrawingView Object
+     * @param view paints a Drawing on a JComponent
      */
-    private void addListeners(DrawingView view) {
+    @Override
+    public void addListeners(DrawingView view) {
         view.addPropertyChangeListener(this);
         view.addFigureSelectionListener(this);
                 
@@ -103,10 +106,11 @@ public class SelectionComponentRepainter extends FigureAdapter
     }
     
     /**
-     * removes the listeners
-     * @param view the DrawingView Object
+     * Removes the listeners
+     * @param view paints a Drawing on a JComponent
      */
-    private void removeListeners(DrawingView view) {
+    @Override
+    public void removeListeners(DrawingView view) {
         view.removePropertyChangeListener(this);
         view.removeFigureSelectionListener(this);
         
@@ -121,7 +125,8 @@ public class SelectionComponentRepainter extends FigureAdapter
      * for the Active View 
      * @param evt the values for the DrawingView Object
      */
-    private void activeViewPropertyChangedHandler(PropertyChangeEvent evt) {
+    @Override
+    public void activeViewPropertyChangedHandler(PropertyChangeEvent evt) {
         DrawingView view = (DrawingView) evt.getOldValue();
         
         if (view != null) {
@@ -143,7 +148,8 @@ public class SelectionComponentRepainter extends FigureAdapter
      * for the Drawing
      * @param evt the values for the DrawingView Object
      */
-    private void drawingPropertyChangedHandler(PropertyChangeEvent evt) {
+    @Override
+    public void drawingPropertyChangedHandler(PropertyChangeEvent evt) {
         Drawing drawing = (Drawing) evt.getOldValue();
         
         if (drawing != null) {
