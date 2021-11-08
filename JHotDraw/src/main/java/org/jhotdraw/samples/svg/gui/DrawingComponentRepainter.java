@@ -26,24 +26,22 @@ import org.jhotdraw.draw.*;
  * @version 1.0 23.05.2008 Created.
  */
 
-// The class is similar to the SelectionComponentRepainter - Duplicate code
+// Implements AbstractComponentRepainter interface since a lot of the methods
+// for DrawingComponentRepainter & SelectionComponentRepainter are the same
 public class DrawingComponentRepainter extends FigureAdapter
-        implements PropertyChangeListener {
+        implements AbstractComponentRepainter {
 
     private DrawingEditor editor;
     private JComponent component;
 
-    // Write method to check if the editor is null
+    // Constructor uses addListeners to reduce the code
     public DrawingComponentRepainter(DrawingEditor editor, JComponent component) {
         this.editor = editor;
         this.component = component;
         if (editor != null) {
             if (editor.getActiveView() != null) {
                 DrawingView view = editor.getActiveView();
-                view.addPropertyChangeListener(this);
-                if (view.getDrawing() != null) {
-                    view.getDrawing().addFigureListener(this);
-                }
+                this.addListeners(view);
             }
 
             editor.addPropertyChangeListener(this);
@@ -55,35 +53,23 @@ public class DrawingComponentRepainter extends FigureAdapter
         component.repaint();
     }
 
-    // Method will be changed due to long method
+    /**
+     * Rewrote the propertyChange() to use the 
+     * activeViewPropertyChangedHandler() or the drawingPropertyChangedHandler()
+     * depending on if the propertyName hits the Active View or the DrawingView
+     * @param evt A PropertyChangeEvent object describing the event source and 
+     * the property that has changed to determine if the method executes the logic
+     * for activeViewPropertyChangedHandler() or 
+     * drawingPropertyChangedHandler()
+     */
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         String name = evt.getPropertyName();
+        
         if (name == DrawingEditor.ACTIVE_VIEW_PROPERTY) {
-            DrawingView view = (DrawingView) evt.getOldValue();
-            if (view != null) {
-                view.removePropertyChangeListener(this);
-                if (view.getDrawing() != null) {
-                    view.getDrawing().removeFigureListener(this);
-                }
-            }
-            view = (DrawingView) evt.getNewValue();
-            if (view != null) {
-                view.addPropertyChangeListener(this);
-                if (view.getDrawing() != null) {
-                    view.getDrawing().addFigureListener(this);
-                }
-            }
-            component.repaint();
+            this.activeViewPropertyChangedHandler(evt);
         } else if (name == DrawingView.DRAWING_PROPERTY) {
-            Drawing drawing = (Drawing) evt.getOldValue();
-            if (drawing != null) {
-                drawing.removeFigureListener(this);
-            }
-            drawing = (Drawing) evt.getNewValue();
-            if (drawing != null) {
-                drawing.addFigureListener(this);
-            }
-            component.repaint();
+            this.drawingPropertyChangedHandler(evt);
         } else {
             component.repaint();
         }
@@ -94,15 +80,84 @@ public class DrawingComponentRepainter extends FigureAdapter
         if (editor != null) {
             if (editor.getActiveView() != null) {
                 DrawingView view = editor.getActiveView();
-                view.removePropertyChangeListener(this);
-                if (view.getDrawing() != null) {
-                    view.getDrawing().removeFigureListener(this);
-                }
+                this.removeListeners(view);
             }
             editor.removePropertyChangeListener(this);
             editor = null;
         }
         component = null;
+    }
+
+    /**
+     * Adds the listeners
+     * @param view paints a Drawing on a JComponent
+     */
+    @Override
+    public void addListeners(DrawingView view) {
+        view.addPropertyChangeListener(this);
+                
+        if (view.getDrawing() != null) {
+            view.getDrawing().addFigureListener(this);
+        }
+    }
+
+    /**
+     * Removes the listeners
+     * @param view paints a Drawing on a JComponent
+     */
+    @Override
+    public void removeListeners(DrawingView view) {
+        view.removePropertyChangeListener(this);
+        
+        if (view.getDrawing() != null) {
+            view.getDrawing().removeFigureListener(this);
+        }
+    }
+
+    /**
+     * Updates the old values with the new values by removing the old
+     * listeners and adding the new listeners when the values are changed
+     * for the Active View 
+     * @param evt the values for the DrawingView Object
+     */
+    @Override
+    public void activeViewPropertyChangedHandler(PropertyChangeEvent evt) {
+        DrawingView view = (DrawingView) evt.getOldValue();
+        
+        if (view != null) {
+            this.removeListeners(view);
+        }
+        
+        view = (DrawingView) evt.getNewValue();
+        
+        if (view != null) {
+           this.addListeners(view);
+        }
+        
+        component.repaint();
+    }
+
+    /**
+     * Updates the old values with the new values by removing the old
+     * listeners and adding the new listeners when the values are changed
+     * for the Drawing
+     * @param evt the values for the DrawingView Object
+     */
+    @Override
+    public void drawingPropertyChangedHandler(PropertyChangeEvent evt) {
+        Drawing drawing = (Drawing) evt.getOldValue();
+        
+        if (drawing != null) {
+            drawing.removeFigureListener(this);
+        }
+        
+        drawing = (Drawing) evt.getNewValue();
+        
+        if (drawing != null) {
+            drawing.addFigureListener(this);
+        }
+        
+        component.repaint();
     }
 }
 

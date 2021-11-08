@@ -25,14 +25,15 @@ import org.jhotdraw.draw.*;
  * @version 1.0 23.05.2008 Created.
  */
 
-// The class is similar to the DrawingComponentPainter - Duplicate code
+// Implements AbstractComponentRepainter interface since a lot of the methods
+// for SelectionComponentRepainter & DrawingComponentRepainter are the same
 public class SelectionComponentRepainter extends FigureAdapter
         implements FigureSelectionListener, AbstractComponentRepainter {
 
     private DrawingEditor editor;
     private JComponent component;
     
-    // Constructor uses addListeners to reduce the code
+    // Constructor uses addListeners to reduce the code 
     public SelectionComponentRepainter(DrawingEditor editor, JComponent component) {
         this.editor = editor;
         this.component = component;
