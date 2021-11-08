@@ -40,6 +40,7 @@ public class ClearSelectionAction extends AbstractAction {
         labels.configureAction(this, ID);
     }
 
+    // Write method to check the different instances
     @FeatureEntryPoint(JHotDrawFeatures.AUTOMATIC_SELECTION)
     public void actionPerformed(ActionEvent evt) {
         Component focusOwner = KeyboardFocusManager.

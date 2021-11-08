@@ -26,12 +26,15 @@ import org.jhotdraw.draw.*;
  * @author Werner Randelshofer
  * @version 1.0 23.05.2008 Created.
  */
+
+// The class is similar to the DrawingComponentPainter - Duplicate code
 public class SelectionComponentRepainter extends FigureAdapter
         implements PropertyChangeListener, FigureSelectionListener {
 
     private DrawingEditor editor;
     private JComponent component;
 
+    // Write method to check if the editor is null
     public SelectionComponentRepainter(DrawingEditor editor, JComponent component) {
         this.editor = editor;
         this.component = component;
@@ -53,6 +56,7 @@ public class SelectionComponentRepainter extends FigureAdapter
         component.repaint();
     }
 
+    // Method will be changed due to long method
     public void propertyChange(PropertyChangeEvent evt) {
         String name = evt.getPropertyName();
         if (name == DrawingEditor.ACTIVE_VIEW_PROPERTY) {
@@ -92,6 +96,7 @@ public class SelectionComponentRepainter extends FigureAdapter
         component.repaint();
     }
 
+    // Write method to remove Listeners
     public void dispose() {
         if (editor != null) {
             if (editor.getActiveView() != null) {
