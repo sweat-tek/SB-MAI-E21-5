@@ -177,6 +177,7 @@ public class SelectionTool extends AbstractTool
         tracker.draw(g);
     }
 
+    // Write methods due to the long method
     @Override
     public void mousePressed(MouseEvent evt) {
         if (getView() != null && getView().isEnabled()) {
