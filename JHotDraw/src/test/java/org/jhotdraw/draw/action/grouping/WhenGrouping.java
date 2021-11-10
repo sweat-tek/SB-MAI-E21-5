@@ -1,4 +1,4 @@
-package org.jhotdraw.draw.action;
+package org.jhotdraw.draw.action.grouping;
 
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.BeforeStage;
@@ -9,6 +9,8 @@ import java.util.Set;
 import org.jhotdraw.draw.CompositeFigure;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.action.GroupAction;
+import org.jhotdraw.draw.action.UngroupAction;
 import org.jhotdraw.samples.svg.figures.SVGGroupFigure;
 
 public class WhenGrouping extends Stage<WhenGrouping> {
