@@ -167,7 +167,6 @@ public class SVGPathFigure extends AbstractAttributedCompositeFigure implements 
         return cachedHitShape;
     }
 
-    // ToDo [aj] Smell = Keep Unit Interfaces Small, (3) 4 parameters
     // int count;
     public Rectangle2D.Double getDrawingArea() {
         if (cachedDrawingArea == null) {
@@ -215,7 +214,8 @@ public class SVGPathFigure extends AbstractAttributedCompositeFigure implements 
         } else {
             drawingArea = new Rectangle2D.Double(rx.getX(), rx.getY(), rx.getWidth(), rx.getHeight());
         }
-        Geom.grow(drawingArea, strokeRect.getWidth(), strokeRect.getHeight());
+        Dimension2DDouble dimensions = new Dimension2DDouble(strokeRect.getWidth(), strokeRect.getHeight());
+        Geom.grow(drawingArea, dimensions);
         return drawingArea;
     }
 
