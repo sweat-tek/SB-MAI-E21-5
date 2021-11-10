@@ -167,32 +167,56 @@ public class SVGPathFigure extends AbstractAttributedCompositeFigure implements 
         return cachedHitShape;
     }
 
-    // ToDo [aj] Smell = Write Short Units of Code, 23 lines
-    // ToDo [aj] Smell = Write Simple Units of Code, BP = 6
-    // ToDo [aj] Smell = Keep Unit Interfaces Small, 4 parameters
+    // ToDo [aj] Smell = Keep Unit Interfaces Small, (3) 4 parameters
     // int count;
     public Rectangle2D.Double getDrawingArea() {
         if (cachedDrawingArea == null) {
-            double strokeTotalWidth = AttributeKeys.getStrokeTotalWidth(this);
-            double width = strokeTotalWidth / 2d;
-            if (STROKE_JOIN.get(this) == BasicStroke.JOIN_MITER) {
-                width *= STROKE_MITER_LIMIT.get(this);
-            } else if (STROKE_CAP.get(this) != BasicStroke.CAP_BUTT) {
-                width += strokeTotalWidth * 2;
-            }
-            GeneralPath gp = (GeneralPath) getPath();
-            Rectangle2D strokeRect = new Rectangle2D.Double(0, 0, width, width);
-            if (TRANSFORM.get(this) != null) {
-                gp = (GeneralPath) gp.clone();
-                gp.transform(TRANSFORM.get(this));
-                strokeRect = TRANSFORM.get(this).createTransformedShape(strokeRect).getBounds2D();
-            }
-            Rectangle2D rx = gp.getBounds2D();
-            Rectangle2D.Double r = (rx instanceof Rectangle2D.Double) ? (Rectangle2D.Double) rx : new Rectangle2D.Double(rx.getX(), rx.getY(), rx.getWidth(), rx.getHeight());
-            Geom.grow(r, strokeRect.getWidth(), strokeRect.getHeight());
-            cachedDrawingArea = r;
+            cacheDrawingArea();
         }
         return (Rectangle2D.Double) cachedDrawingArea.clone();
+    }
+
+    private void cacheDrawingArea() {
+        double strokeWidth = calculateStrokeWidth();
+        
+        GeneralPath gp = (GeneralPath) getPath();
+        Rectangle2D strokeRect = new Rectangle2D.Double(0, 0, strokeWidth, strokeWidth);
+        
+        transformDrawingArea(gp, strokeRect);
+        Rectangle2D.Double drawingArea = resizeDrawingArea(gp, strokeRect);
+        
+        cachedDrawingArea = drawingArea;
+    }
+
+    private double calculateStrokeWidth() {
+        double strokeTotalWidth = AttributeKeys.getStrokeTotalWidth(this);
+        double width = strokeTotalWidth / 2d;
+        if (STROKE_JOIN.get(this) == BasicStroke.JOIN_MITER) {
+            width *= STROKE_MITER_LIMIT.get(this);
+        } else if (STROKE_CAP.get(this) != BasicStroke.CAP_BUTT) {
+            width += strokeTotalWidth * 2;
+        }
+        return width;
+    }
+
+    private void transformDrawingArea(GeneralPath gp, Rectangle2D strokeRect) {
+        if (TRANSFORM.get(this) != null) {
+            gp = (GeneralPath) gp.clone();
+            gp.transform(TRANSFORM.get(this));
+            strokeRect = TRANSFORM.get(this).createTransformedShape(strokeRect).getBounds2D();
+        }
+    }
+
+    private Rectangle2D.Double resizeDrawingArea(GeneralPath gp, Rectangle2D strokeRect) {
+        Rectangle2D rx = gp.getBounds2D();
+        Rectangle2D.Double drawingArea;
+        if (rx instanceof Rectangle2D.Double) {
+            drawingArea = (Rectangle2D.Double) rx;
+        } else {
+            drawingArea = new Rectangle2D.Double(rx.getX(), rx.getY(), rx.getWidth(), rx.getHeight());
+        }
+        Geom.grow(drawingArea, strokeRect.getWidth(), strokeRect.getHeight());
+        return drawingArea;
     }
 
     @Override
