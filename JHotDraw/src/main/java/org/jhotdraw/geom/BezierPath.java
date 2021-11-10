@@ -475,8 +475,6 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     public class Coords {
         
-        private double x;
-        private double y;
         private double x1;
         private double y1;
         private double x2;
@@ -484,34 +482,12 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         
         
         public Coords(double x1, double y1, double x2, double y2){
-            this.x = 0;
-            this.y = 0;
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-        }
-        public Coords(double x, double y, double x1, double y1, double x2, double y2){
-            this.x = x;
-            this.y = y;
             this.x1 = x1;
             this.y1 = y1;
             this.x2 = x2;
             this.y2 = y2;
         }
         
-        public double getX() {
-            return x;
-        }
-        public void setX(double x) {
-            this.x = x;
-        }
-        public double getY() {
-            return y;
-        }
-        public void setY(double y) {
-            this.y = y;
-        }
         public double getX1() {
             return x1;
         }
@@ -538,18 +514,18 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         }
     }
     
-    public void handleBounds(Coords coords){
-        if (coords.getX() < coords.getX1()) {
-            coords.setX1(coords.getX());
+    public void handleBounds(Coords coords, double x, double y){
+        if (x < coords.getX1()) {
+            coords.setX1(x);
         }
-        if (coords.getY() < coords.getY1()) {
-            coords.setY1(coords.getY());
+        if (y < coords.getY1()) {
+            coords.setY1(y);
         }
-        if (coords.getX() > coords.getX2()) {
-            coords.setX2(coords.getX());
+        if (x > coords.getX2()) {
+            coords.setX2(x);
         }
-        if (coords.getY() > coords.getY2()) {
-            coords.setY2(coords.getY());
+        if (y > coords.getY2()) {
+            coords.setY2(y);
         }
     }
     
