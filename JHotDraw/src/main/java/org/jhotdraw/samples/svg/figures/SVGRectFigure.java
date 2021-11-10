@@ -146,7 +146,7 @@ public class SVGRectFigure extends SVGAttributedFigure implements SVGFigure {
         return (Rectangle2D.Double) roundrect.getBounds2D();
     }
 
-    // ToDo [aj] Smell = Write Short Units of Code
+    // ToDo [aj] Smell = Write Short Units of Code, 20 lines
     // ToDo [aj] Smell = Write Simple Units of Code, BP = 6
     // ToDo [aj] Smell = Keep Unit Interfaces Small, 4 parameters
     @Override

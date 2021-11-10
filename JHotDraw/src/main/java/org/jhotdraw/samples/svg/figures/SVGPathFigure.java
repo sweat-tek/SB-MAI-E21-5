@@ -167,7 +167,7 @@ public class SVGPathFigure extends AbstractAttributedCompositeFigure implements 
         return cachedHitShape;
     }
 
-    // ToDo [aj] Smell = Write Short Units of Code
+    // ToDo [aj] Smell = Write Short Units of Code, 23 lines
     // ToDo [aj] Smell = Write Simple Units of Code, BP = 6
     // ToDo [aj] Smell = Keep Unit Interfaces Small, 4 parameters
     // int count;
