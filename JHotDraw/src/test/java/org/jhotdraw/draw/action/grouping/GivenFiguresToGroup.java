@@ -1,4 +1,4 @@
-package org.jhotdraw.draw.action;
+package org.jhotdraw.draw.action.grouping;
 
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.BeforeStage;

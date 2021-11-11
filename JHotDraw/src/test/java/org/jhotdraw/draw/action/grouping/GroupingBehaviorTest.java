@@ -1,5 +1,6 @@
-package org.jhotdraw.draw.action;
+package org.jhotdraw.draw.action.grouping;
 
+import org.jhotdraw.draw.action.grouping.GivenFiguresToGroup;
 import com.tngtech.jgiven.junit.ScenarioTest;
 import org.junit.Test;
 
