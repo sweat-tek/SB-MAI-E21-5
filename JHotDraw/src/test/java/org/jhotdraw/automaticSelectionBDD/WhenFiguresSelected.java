@@ -5,10 +5,27 @@
  */
 package org.jhotdraw.automaticSelectionBDD;
 
+import com.tngtech.jgiven.Stage;
+import com.tngtech.jgiven.annotation.ExpectedScenarioState;
+import org.jhotdraw.draw.DefaultDrawingView;
+import org.junit.Assert;
+
 /**
  *
  * @author svane
  */
-public class WhenFiguresSelected {
+public class WhenFiguresSelected extends Stage<WhenFiguresSelected> {
     
+    @ExpectedScenarioState
+    private DefaultDrawingView drawingView;
+    
+    public WhenFiguresSelected figuresSelected() {
+        Assert.assertEquals(0, drawingView.getSelectionCount());
+        
+        drawingView.selectAll();
+        
+        Assert.assertNotEquals(0, drawingView.getSelectionCount());
+        
+        return self();
+    }
 }

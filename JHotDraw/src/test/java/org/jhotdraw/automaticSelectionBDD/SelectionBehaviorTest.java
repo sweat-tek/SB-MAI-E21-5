@@ -5,10 +5,19 @@
  */
 package org.jhotdraw.automaticSelectionBDD;
 
+import com.tngtech.jgiven.junit.ScenarioTest;
+import org.junit.Test;
+
 /**
  *
  * @author svane
  */
-public class SelectionBehaviorTest {
+public class SelectionBehaviorTest extends ScenarioTest<GivenFiguresDrawn, WhenFiguresSelected, ThenFiguresSelected> {
     
+    @Test
+    public void automaticSelection() {
+        given().figuresDrawn();
+        when().figuresSelected();
+        then().FiguresAreSelected();
+    }
 }
