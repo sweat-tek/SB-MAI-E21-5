@@ -5,8 +5,6 @@
  */
 package org.jhotdraw.draw.action;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import javax.swing.JComponent;
 import org.junit.After;
@@ -17,7 +15,6 @@ import org.junit.Test;
 import org.jhotdraw.draw.DefaultDrawingEditor;
 import org.jhotdraw.draw.DefaultDrawingView;
 import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.FigureSelectionListener;
 import org.junit.Assert;
 
@@ -28,9 +25,6 @@ import org.junit.Assert;
 public class SelectionComponentRepainterTest {
     
     private SelectionComponentRepainter scr;
-    private AbstractComponentRepainter acr;
-    private PropertyChangeEvent evt;
-    private Object source;
     
     public SelectionComponentRepainterTest() { 
     }
@@ -47,9 +41,7 @@ public class SelectionComponentRepainterTest {
     public void setUp() {
         DrawingEditor editor = new DefaultDrawingEditor();
         JComponent component = new JComponent() {};
-        evt = new PropertyChangeEvent(source, null, null, null);
         scr = new SelectionComponentRepainter(editor, component);
-        acr = new AbstractComponentRepainter(editor, component);
     }
     
     @After
@@ -77,20 +69,5 @@ public class SelectionComponentRepainterTest {
         
         Assert.assertFalse(Arrays.asList(view.getPropertyChangeListeners()).contains(scr));
         Assert.assertFalse(Arrays.asList(view.getListeners(FigureSelectionListener.class)).contains(scr));
-    }
-    
-    @Test
-    public void activeViewPropertyChangedHandler() {
-        String name = evt.getPropertyName();
-        String expectedName = DrawingEditor.ACTIVE_VIEW_PROPERTY;
-        
-        Assert.assertEquals(expectedName, name);
-        
-        
-    }
-    
-    @Test
-    public void drawingPropertyChangedHandler() {
-        
     }
 }
