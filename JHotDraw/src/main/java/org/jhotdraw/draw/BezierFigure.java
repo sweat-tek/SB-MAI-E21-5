@@ -620,36 +620,41 @@ public class BezierFigure extends AbstractAttributedFigure {
     @Override public boolean handleMouseClick(Point2D.Double p, MouseEvent evt, DrawingView view) {
         if (evt.getClickCount() == 2 && view.getHandleDetailLevel() % 2 == 0) {
             willChange();
-            final int index = splitSegment(p, (float) (5f / view.getScaleFactor()));
-            if (index != -1) {
-                final BezierPath.Node newNode = getNode(index);
-                fireUndoableEditHappened(new AbstractUndoableEdit() {
-                    @Override
-                    public String getPresentationName() {
-                        ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                        return labels.getString("edit.bezierPath.splitSegment.text");
-                    }
-                    @Override
-                    public void redo() throws CannotRedoException {
-                        super.redo();
-                        willChange();
-                        addNode(index, newNode);
-                        changed();
-                    }
-                    
-                    @Override
-                    public void undo() throws CannotUndoException {
-                        super.undo();
-                        willChange();
-                        removeNode(index);
-                        changed();
-                    }
-                    
-                });
-                changed();
-                evt.consume();
-                return true;
-            }
+            return undoableEdit(p, evt, view);
+        }
+        return false;
+    }
+    
+    public boolean undoableEdit(Point2D.Double p, MouseEvent evt, DrawingView view){
+        final int index = splitSegment(p, (float) (5f / view.getScaleFactor()));
+        if (index != -1) {
+            final BezierPath.Node newNode = getNode(index);
+            fireUndoableEditHappened(new AbstractUndoableEdit() {
+                @Override
+                public String getPresentationName() {
+                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                    return labels.getString("edit.bezierPath.splitSegment.text");
+                }
+
+                @Override
+                public void redo() throws CannotRedoException {
+                    super.redo();
+                    willChange();
+                    addNode(index, newNode);
+                    changed();
+                }
+
+                @Override
+                public void undo() throws CannotUndoException {
+                    super.undo();
+                    willChange();
+                    removeNode(index);
+                    changed();
+                }
+            });
+            changed();
+            evt.consume();
+            return true;
         }
         return false;
     }
