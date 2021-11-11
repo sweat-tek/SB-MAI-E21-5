@@ -475,11 +475,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
 
     public class Coords {
         
-        private double x1;
-        private double y1;
-        private double x2;
-        private double y2;
-        
+        private double x1, y1, x2, y2;
         
         public Coords(double x1, double y1, double x2, double y2){
             this.x1 = x1;
@@ -488,193 +484,61 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             this.y2 = y2;
         }
         
-        public double getX1() {
-            return x1;
-        }
-        public void setX1(double x1) {
-            this.x1 = x1;
-        }
-        public double getY1() {
-            return y1;
-        }
-        public void setY1(double y1) {
-            this.y1 = y1;
-        }
-        public double getX2() {
-            return x2;
-        }
-        public void setX2(double x2) {
-            this.x2 = x2;
-        }
-        public double getY2() {
-            return y2;
-        }
-        public void setY2(double y2) {
-            this.y2 = y2;
-        }
+        public double getX1() {return x1;}
+        public double getY1() {return y1;}
+        public double getX2() {return x2;}
+        public double getY2() {return y2;}
+        
+        public void handleBounds(double x, double y){
+        if (x < this.x1) {this.x1 = x;}
+        if (y < this.y1) {this.y1 = y;}
+        if (x > this.x2) {this.x2 = x;}
+        if (y > this.y2) {this.y2 = y;}
     }
-    
-    public void handleBounds(Coords coords, double x, double y){
-        if (x < coords.getX1()) {
-            coords.setX1(x);
-        }
-        if (y < coords.getY1()) {
-            coords.setY1(y);
-        }
-        if (x > coords.getX2()) {
-            coords.setX2(x);
-        }
-        if (y > coords.getY2()) {
-            coords.setY2(y);
-        }
     }
     
     public Rectangle2D.Double getBounds2D() {
         if (bounds == null) {
-            double x1, y1, x2, y2;
+            Coords coords;
             int size = size();
             if (size == 0) {
-                x1 = y1 = x2 = y2 = 0.0f;
+                coords = new Coords(0.0f, 0.0f, 0.0f, 0.0f);
             } else {
-                double x, y;
-
                 // handle first node
-                Node node = get(0);
-                y1 = y2 = node.y[0];
-                x1 = x2 = node.x[0];
+                Node node = get(0);                
+                coords = new Coords(node.x[0], node.y[0], node.x[0], node.y[0]);
+                
                 if (isClosed && (node.mask & C1_MASK) != 0) {
-                    y = node.y[1];
-                    x = node.x[1];
-                    if (x < x1) {
-                        x1 = x;
-                    }
-                    if (y < y1) {
-                        y1 = y;
-                    }
-                    if (x > x2) {
-                        x2 = x;
-                    }
-                    if (y > y2) {
-                        y2 = y;
-                    }
+                    coords.handleBounds(node.x[1], node.y[1]);
                 }
                 if ((node.mask & C2_MASK) != 0) {
-                    y = node.y[2];
-                    x = node.x[2];
-                    if (x < x1) {
-                        x1 = x;
-                    }
-                    if (y < y1) {
-                        y1 = y;
-                    }
-                    if (x > x2) {
-                        x2 = x;
-                    }
-                    if (y > y2) {
-                        y2 = y;
-                    }
+                    coords.handleBounds(node.x[2], node.y[2]);
                 }
+                
                 // handle last node
                 node = get(size - 1);
-                y = node.y[0];
-                x = node.x[0];
-                if (x < x1) {
-                    x1 = x;
-                }
-                if (y < y1) {
-                    y1 = y;
-                }
-                if (x > x2) {
-                    x2 = x;
-                }
-                if (y > y2) {
-                    y2 = y;
-                }
+                coords.handleBounds(node.x[0], node.y[0]);
                 if ((node.mask & C1_MASK) != 0) {
-                    y = node.y[1];
-                    x = node.x[1];
-                    if (x < x1) {
-                        x1 = x;
-                    }
-                    if (y < y1) {
-                        y1 = y;
-                    }
-                    if (x > x2) {
-                        x2 = x;
-                    }
-                    if (y > y2) {
-                        y2 = y;
-                    }
+                    coords.handleBounds(node.x[1], node.y[1]);
                 }
                 if (isClosed && (node.mask & C2_MASK) != 0) {
-                    y = node.y[2];
-                    x = node.x[2];
-                    if (x < x1) {
-                        x1 = x;
-                    }
-                    if (y < y1) {
-                        y1 = y;
-                    }
-                    if (x > x2) {
-                        x2 = x;
-                    }
-                    if (y > y2) {
-                        y2 = y;
-                    }
+                    coords.handleBounds(node.x[2], node.y[2]);
                 }
 
                 // handle all other nodes
                 for (int i = 1, n = size - 1; i < n; i++) {
                     node = get(i);
-                    y = node.y[0];
-                    x = node.x[0];
-                    if (x < x1) {
-                        x1 = x;
-                    }
-                    if (y < y1) {
-                        y1 = y;
-                    }
-                    if (x > x2) {
-                        x2 = x;
-                    }
-                    if (y > y2) {
-                        y2 = y;
-                    }
+                    coords.handleBounds(node.x[0], node.y[0]);
+                    
                     if ((node.mask & C1_MASK) != 0) {
-                        y = node.y[1];
-                        x = node.x[1];
-                        if (x < x1) {
-                            x1 = x;
-                        }
-                        if (y < y1) {
-                            y1 = y;
-                        }
-                        if (x > x2) {
-                            x2 = x;
-                        }
-                        if (y > y2) {
-                            y2 = y;
-                        }
+                        coords.handleBounds(node.x[1], node.y[1]);
                     }
                     if ((node.mask & C2_MASK) != 0) {
-                        y = node.y[2];
-                        x = node.x[2];
-                        if (x < x1) {
-                            x1 = x;
-                        }
-                        if (y < y1) {
-                            y1 = y;
-                        }
-                        if (x > x2) {
-                            x2 = x;
-                        }
-                        if (y > y2) {
-                            y2 = y;
-                        }
+                        coords.handleBounds(node.x[2], node.y[2]);
                     }
                 }
             }
-            bounds = new Rectangle2D.Double(x1, y1, x2 - x1, y2 - y1);
+            bounds = new Rectangle2D.Double(coords.getX1(), coords.getY1(), coords.getX2() - coords.getX1(), coords.getY2() - coords.getY1());
         }
         return (Rectangle2D.Double) bounds.clone();
     }
