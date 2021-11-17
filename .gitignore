@@ -9,6 +9,12 @@ dist/
 *.iml
 *.iws
 
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
 # Mac
 .DS_Store
 
