@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class UndoRedoManagerTest extends ScenarioTest<GivenNoChanges, WhenChangeMade, ThenChangeMade> {   
+public class UndoRedoManagerTest extends ScenarioTest<GivenChanges, WhenChangeMade, ThenChangeMade> {   
     @Test
     public void testCanUndo() {
         given().no_changes();
@@ -53,14 +53,9 @@ public class UndoRedoManagerTest extends ScenarioTest<GivenNoChanges, WhenChange
     
     @Test
     public void testDiscardEdits() {
-        UndoRedoManager instance = new UndoRedoManager();
-        assertTrue(!instance.hasSignificantEdits());
-        
-        instance.addEdit(new Edit(true, false, false));
-        assertTrue(instance.hasSignificantEdits());
-        
-        instance.discardAllEdits();
-        assertTrue(!instance.hasSignificantEdits());
+        given().an_undoable_change();
+        when().discarding_all_edits();
+        then().there_are_no_edits();
     }
     
     @Test

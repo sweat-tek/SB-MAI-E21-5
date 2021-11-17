@@ -15,4 +15,9 @@ public class ThenChangeMade extends Stage<ThenChangeMade> {
         assertTrue(manager.getUndoPresentationName().equals(edit.getUndoPresentationName()));
         return this;
     }
+
+    public ThenChangeMade there_are_no_edits() {
+        assertTrue(!manager.hasSignificantEdits());
+        return this;
+    }
 }

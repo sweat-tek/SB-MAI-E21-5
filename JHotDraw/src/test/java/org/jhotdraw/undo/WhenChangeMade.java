@@ -2,14 +2,13 @@ package org.jhotdraw.undo;
 
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
-import com.tngtech.jgiven.annotation.ProvidedScenarioState;
 import static org.junit.Assert.assertTrue;
 
 public class WhenChangeMade extends Stage<WhenChangeMade>{
     @ExpectedScenarioState
     protected UndoRedoManager manager;
     
-    @ProvidedScenarioState
+    @ExpectedScenarioState
     protected Edit edit;
 
     public WhenChangeMade an_undoable_change_is_made() {
@@ -24,6 +23,11 @@ public class WhenChangeMade extends Stage<WhenChangeMade>{
         manager.addEdit(edit);
         assertTrue(manager.canUndo());
         assertTrue(manager.canUndoOrRedo());
+        return this;
+    }
+
+    public WhenChangeMade discarding_all_edits() {
+        manager.discardAllEdits();
         return this;
     }
 }
