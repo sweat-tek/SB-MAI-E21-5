@@ -25,3 +25,6 @@ FeatureTraces/
 nbactions.xml
 nb-configuration.xml
 /JHotDraw/nbproject/
+
+# VS Code
+./vscode
