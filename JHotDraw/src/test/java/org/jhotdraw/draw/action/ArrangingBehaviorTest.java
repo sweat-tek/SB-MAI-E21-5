@@ -12,7 +12,9 @@ public class ArrangingBehaviorTest extends ScenarioTest<GivenFiguresToArrange, W
                 .and()
                 .someUnselectedFigures();
         when()
-                .sendingFiguresToBack();
+                .sendingFiguresToBack()
+                .and()
+                .bringingFiguresToFront();
         then()
                 .theSelectedFiguresAreStillSelected();
     }
@@ -27,6 +29,7 @@ public class ArrangingBehaviorTest extends ScenarioTest<GivenFiguresToArrange, W
                 .sendingFiguresToBack();
         then()
                 .theSelectedFiguresAreStillSelected()
+                .and()
                 .theSelectedFiguresAreBehindTheOthers();
     }
     
@@ -40,6 +43,7 @@ public class ArrangingBehaviorTest extends ScenarioTest<GivenFiguresToArrange, W
                 .bringingFiguresToFront();
         then()
                 .theSelectedFiguresAreStillSelected()
+                .and()
                 .theSelectedFiguresAreInFrontOfTheOthers();
     }
 }

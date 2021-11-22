@@ -21,24 +21,24 @@ class GivenFiguresToArrange extends Stage<GivenFiguresToArrange> {
 
     GivenFiguresToArrange someSelectedFigures() {
         Figure f1 = new SVGRectFigure();
-        //Figure f2 = new SVGRectFigure();
-        //Figure f3 = new SVGRectFigure();
+        Figure f2 = new SVGRectFigure();
+        Figure f3 = new SVGRectFigure();
         editor.getActiveView().getDrawing().add(f1);
-        //editor.getActiveView().getDrawing().add(f2);
-        //editor.getActiveView().getDrawing().add(f3);
+        editor.getActiveView().getDrawing().add(f2);
+        editor.getActiveView().getDrawing().add(f3);
         editor.getActiveView().addToSelection(f1);
-        //editor.getActiveView().addToSelection(f2);
-        //editor.getActiveView().addToSelection(f3);
+        editor.getActiveView().addToSelection(f2);
+        editor.getActiveView().addToSelection(f3);
         return this;
     }
 
     GivenFiguresToArrange someUnselectedFigures() {
         Figure f1 = new SVGRectFigure();
-        //Figure f2 = new SVGRectFigure();
-        //Figure f3 = new SVGRectFigure();
+        Figure f2 = new SVGRectFigure();
+        Figure f3 = new SVGRectFigure();
         editor.getActiveView().getDrawing().add(f1);
-        //editor.getActiveView().getDrawing().add(f2);
-        //editor.getActiveView().getDrawing().add(f3);
+        editor.getActiveView().getDrawing().add(f2);
+        editor.getActiveView().getDrawing().add(f3);
         return this;
     }
 }
