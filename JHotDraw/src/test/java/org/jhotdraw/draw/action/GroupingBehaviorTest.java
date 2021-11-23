@@ -1,4 +1,4 @@
-package org.jhotdraw.draw.action.grouping;
+package org.jhotdraw.draw.action;
 
 import com.tngtech.jgiven.junit.ScenarioTest;
 import org.junit.Test;
