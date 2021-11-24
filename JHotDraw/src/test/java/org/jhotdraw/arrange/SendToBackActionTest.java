@@ -1,4 +1,4 @@
-package org.jhotdraw.draw.action;
+package org.jhotdraw.arrange;
 
 import java.util.HashSet;
 import javax.swing.undo.UndoableEdit;

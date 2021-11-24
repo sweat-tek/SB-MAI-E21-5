@@ -1,6 +1,7 @@
-package org.jhotdraw.samples.svg.figures;
+package org.jhotdraw.arrange;
 
 import java.awt.geom.Rectangle2D;
+import org.jhotdraw.samples.svg.figures.SVGPathFigure;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

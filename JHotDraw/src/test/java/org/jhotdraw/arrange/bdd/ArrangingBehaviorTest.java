@@ -1,4 +1,4 @@
-package org.jhotdraw.draw.action;
+package org.jhotdraw.arrange.bdd;
 
 import com.tngtech.jgiven.junit.ScenarioTest;
 import org.junit.Test;
