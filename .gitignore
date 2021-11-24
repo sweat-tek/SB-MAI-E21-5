@@ -9,6 +9,12 @@ dist/
 *.iml
 *.iws
 
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
 # Mac
 .DS_Store
 
@@ -19,3 +25,6 @@ FeatureTraces/
 nbactions.xml
 nb-configuration.xml
 /JHotDraw/nbproject/
+
+# VS Code
+./vscode

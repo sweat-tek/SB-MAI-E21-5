@@ -219,29 +219,49 @@ public class UndoRedoManager extends UndoManager {//javax.swing.undo.UndoManager
      * and of the RedoAction.
      */
     private void updateActions() {
-        String label;
         if (DEBUG) System.out.println("UndoManager.updateActions "+
                 editToBeUndone()
                 +" canUndo="+canUndo()+" canRedo="+canRedo());
-        if (canUndo()) {
-            undoAction.setEnabled(true);
-            label = getUndoPresentationName();
+
+        updateAction(true);
+        updateAction(false);
+    }
+
+    private void updateAction(boolean isUndo) {
+        AbstractAction action = getAction(isUndo);
+
+        String label = this.getPresentationName(isUndo);
+        action.putValue(Action.NAME, label);
+        action.putValue(Action.SHORT_DESCRIPTION, label);
+    }
+
+    private AbstractAction getAction(boolean isUndo) {
+        if (isUndo) {
+            return undoAction;
         } else {
-            undoAction.setEnabled(false);
-            label = labels.getString("edit.undo.text");
+            return redoAction;
         }
-        undoAction.putValue(Action.NAME, label);
-        undoAction.putValue(Action.SHORT_DESCRIPTION, label);
-        
-        if (canRedo()) {
-            redoAction.setEnabled(true);
-            label = getRedoPresentationName();
+    }
+
+    private boolean canAction(boolean isUndo) {
+        if (isUndo) {
+            return canUndo();
         } else {
-            redoAction.setEnabled(false);
-            label = labels.getString("edit.redo.text");
+            return canRedo();
         }
-        redoAction.putValue(Action.NAME, label);
-        redoAction.putValue(Action.SHORT_DESCRIPTION, label);
+    }
+
+    private synchronized String getPresentationName(boolean isUndo) {
+        if (canAction(isUndo)) {
+            if (isUndo) {
+                return this.getUndoPresentationName();
+            } else {
+                return this.getRedoPresentationName();
+            }
+        }
+
+        String key = "edit." + (isUndo ? "undo" : "redo") + ".text";
+        return labels.getString(key);
     }
     
     /**
