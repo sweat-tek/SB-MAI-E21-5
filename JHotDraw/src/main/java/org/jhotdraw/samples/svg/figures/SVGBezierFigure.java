@@ -130,7 +130,7 @@ public class SVGBezierFigure extends BezierFigure {
             super.transform(tx);
         }
     }
-    
+
     public Rectangle2D.Double getDrawingArea() {
         if (cachedDrawingArea == null) {
             if (TRANSFORM.get(this) == null) {

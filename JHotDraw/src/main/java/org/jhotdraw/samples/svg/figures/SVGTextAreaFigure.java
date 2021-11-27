@@ -82,7 +82,7 @@ public class SVGTextAreaFigure extends SVGAttributedFigure
     public Rectangle2D.Double getBounds() {
         return (Rectangle2D.Double) bounds.clone();
     }
-    
+
     @Override
     public Rectangle2D.Double getDrawingArea() {
         if (cachedDrawingArea == null) {

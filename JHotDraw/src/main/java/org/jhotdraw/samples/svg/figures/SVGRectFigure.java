@@ -145,7 +145,7 @@ public class SVGRectFigure extends SVGAttributedFigure implements SVGFigure {
     public Rectangle2D.Double getBounds() {
         return (Rectangle2D.Double) roundrect.getBounds2D();
     }
-    
+
     @Override
     public Rectangle2D.Double getDrawingArea() {
         Rectangle2D rx = getTransformedShape().getBounds2D();

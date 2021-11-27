@@ -146,7 +146,7 @@ public class SVGImageFigure extends SVGAttributedFigure implements SVGFigure, Im
     public Rectangle2D.Double getBounds() {
         return (Rectangle2D.Double) rectangle.clone();
     }
-    
+
     @Override
     public Rectangle2D.Double getDrawingArea() {
         Rectangle2D rx = getTransformedShape().getBounds2D();
