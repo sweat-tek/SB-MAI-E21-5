@@ -9,7 +9,9 @@ public abstract class ArrangeAction extends AbstractSelectedAction {
     public String ID;
     public ArrangeLayer direction;
 
-    public ArrangeAction(DrawingEditor editor, String id, ArrangeLayer direction) {
+    public ArrangeAction(DrawingEditor editor, 
+                         String id, 
+                         ArrangeLayer direction) {
         super(editor);
         this.ID = id;
         this.direction = direction;
