@@ -110,7 +110,6 @@ public class SVGTextFigure
         }
         return (Rectangle2D.Double) cachedBounds.clone();
     }
-
     @Override public Rectangle2D.Double getDrawingArea() {
         if (cachedDrawingArea == null) {
             Rectangle2D rx = getBounds();

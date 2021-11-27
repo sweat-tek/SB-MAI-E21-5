@@ -22,6 +22,7 @@ import org.jhotdraw.util.*;
 import java.util.*;
 import org.jhotdraw.app.JHotDrawFeatures;
 import org.jhotdraw.geom.Geom;
+import org.jhotdraw.draw.action.arrange.*;
 
 /**
  * QuadTreeDrawing uses a QuadTree2DDouble to improve responsiveness of drawings

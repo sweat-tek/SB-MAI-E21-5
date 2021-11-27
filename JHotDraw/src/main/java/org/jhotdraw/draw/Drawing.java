@@ -24,6 +24,7 @@ import java.util.*;
 import javax.swing.undo.*;
 import javax.swing.event.*;
 import java.io.*;
+import org.jhotdraw.draw.action.arrange.*;
 /**
  * A drawing holds figures. It can draw its figures, and it can find
  * them on its drawing area.

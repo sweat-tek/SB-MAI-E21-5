@@ -3,14 +3,9 @@ package org.jhotdraw.arrange;
 import java.util.HashSet;
 import javax.swing.undo.UndoableEdit;
 import org.junit.*;
-import org.jhotdraw.draw.ArrangeLayer;
-import org.jhotdraw.draw.Drawing;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.DrawingView;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.arrange.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.ArgumentMatchers.any;
 
 /**
  *

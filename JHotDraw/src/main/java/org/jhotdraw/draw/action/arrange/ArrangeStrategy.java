@@ -1,7 +1,5 @@
 package org.jhotdraw.draw.action.arrange;
 
-import org.jhotdraw.draw.ArrangeLayer;
-
 /**
  *
  * @author antje12

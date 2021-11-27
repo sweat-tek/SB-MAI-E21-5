@@ -2,11 +2,7 @@ package org.jhotdraw.arrange;
 
 import java.awt.geom.Rectangle2D;
 import org.jhotdraw.samples.svg.figures.SVGPathFigure;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import static org.junit.Assert.*;
 
 /**

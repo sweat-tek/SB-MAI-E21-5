@@ -1,14 +1,9 @@
 package org.jhotdraw.arrange;
 
-import org.jhotdraw.draw.ArrangeLayer;
-import org.jhotdraw.draw.Figure;
-import org.jhotdraw.draw.QuadTreeDrawing;
+import org.jhotdraw.draw.*;
+import org.jhotdraw.draw.action.arrange.*;
 import org.jhotdraw.samples.svg.figures.SVGRectFigure;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  *

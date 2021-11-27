@@ -1,4 +1,4 @@
-package org.jhotdraw.draw;
+package org.jhotdraw.draw.action.arrange;
 
 public enum ArrangeLayer {
     FRONT,

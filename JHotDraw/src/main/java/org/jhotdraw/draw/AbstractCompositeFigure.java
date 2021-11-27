@@ -24,6 +24,7 @@ import org.jhotdraw.geom.*;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.draw.action.arrange.*;
 
 /**
  * AbstractCompositeFigure.
