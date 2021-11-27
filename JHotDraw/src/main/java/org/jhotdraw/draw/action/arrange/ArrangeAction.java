@@ -17,9 +17,9 @@ public abstract class ArrangeAction extends AbstractSelectedAction {
 
     public void actionPerformed(java.awt.event.ActionEvent e) {
         ArrangeModel model = new ArrangeModel(getView());
-        arrange(model, direction);
+        arrange(model, this.direction);
         ArrangeStrategy strategy;
-        if (direction == ArrangeLayer.BACK) {
+        if (this.direction == ArrangeLayer.BACK) {
             strategy = new ArrangeStrategy(ArrangeLayer.BACK, ArrangeLayer.FRONT);
         } else {
             strategy = new ArrangeStrategy(ArrangeLayer.FRONT, ArrangeLayer.BACK);
