@@ -5,7 +5,6 @@ import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
 public class ArrangeModel {
-
     public final DrawingView view;
     public final LinkedList<Figure> figures;
 
