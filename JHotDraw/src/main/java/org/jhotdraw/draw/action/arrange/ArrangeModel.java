@@ -4,10 +4,6 @@ import java.util.LinkedList;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
 
-/**
- *
- * @author antje12
- */
 public class ArrangeModel {
 
     public final DrawingView view;

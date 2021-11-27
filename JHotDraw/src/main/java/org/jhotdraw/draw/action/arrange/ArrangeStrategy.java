@@ -1,9 +1,5 @@
 package org.jhotdraw.draw.action.arrange;
 
-/**
- *
- * @author antje12
- */
 public class ArrangeStrategy {
 
     public ArrangeLayer redo;
