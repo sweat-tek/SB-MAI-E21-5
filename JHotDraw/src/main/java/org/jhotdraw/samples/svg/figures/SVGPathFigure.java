@@ -177,13 +177,10 @@ public class SVGPathFigure extends AbstractAttributedCompositeFigure implements 
 
     private void cacheDrawingArea() {
         double strokeWidth = calculateStrokeWidth();
-        
         GeneralPath gp = (GeneralPath) getPath();
         Rectangle2D strokeRect = new Rectangle2D.Double(0, 0, strokeWidth, strokeWidth);
-        
         transformDrawingArea(gp, strokeRect);
         Rectangle2D.Double drawingArea = resizeDrawingArea(gp, strokeRect);
-        
         cachedDrawingArea = drawingArea;
     }
 
