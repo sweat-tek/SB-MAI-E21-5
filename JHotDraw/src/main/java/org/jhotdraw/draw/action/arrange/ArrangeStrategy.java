@@ -1,7 +1,6 @@
 package org.jhotdraw.draw.action.arrange;
 
 public class ArrangeStrategy {
-
     public ArrangeLayer redo;
     public ArrangeLayer undo;
 
