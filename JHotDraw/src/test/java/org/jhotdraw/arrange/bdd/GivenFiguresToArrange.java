@@ -1,8 +1,7 @@
 package org.jhotdraw.arrange.bdd;
 
 import com.tngtech.jgiven.Stage;
-import com.tngtech.jgiven.annotation.BeforeStage;
-import com.tngtech.jgiven.annotation.ProvidedScenarioState;
+import com.tngtech.jgiven.annotation.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.samples.svg.figures.SVGRectFigure;
 

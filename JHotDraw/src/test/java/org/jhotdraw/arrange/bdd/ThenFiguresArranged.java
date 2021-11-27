@@ -2,13 +2,9 @@ package org.jhotdraw.arrange.bdd;
 
 import com.tngtech.jgiven.Stage;
 import com.tngtech.jgiven.annotation.ExpectedScenarioState;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.Figure;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.*;
+import org.jhotdraw.draw.*;
+import static org.junit.Assert.*;
 
 class ThenFiguresArranged extends Stage<ThenFiguresArranged> {
 

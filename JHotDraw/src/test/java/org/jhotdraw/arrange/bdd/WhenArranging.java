@@ -1,13 +1,10 @@
 package org.jhotdraw.arrange.bdd;
 
 import com.tngtech.jgiven.Stage;
-import com.tngtech.jgiven.annotation.BeforeStage;
-import com.tngtech.jgiven.annotation.ExpectedScenarioState;
-import com.tngtech.jgiven.annotation.ProvidedScenarioState;
+import com.tngtech.jgiven.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
-import org.jhotdraw.draw.DrawingEditor;
-import org.jhotdraw.draw.Figure;
+import org.jhotdraw.draw.*;
 import org.jhotdraw.draw.action.arrange.*;
 
 public class WhenArranging extends Stage<WhenArranging> {
