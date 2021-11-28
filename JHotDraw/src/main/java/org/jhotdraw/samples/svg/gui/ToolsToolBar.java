@@ -13,6 +13,7 @@
  */
 package org.jhotdraw.samples.svg.gui;
 
+import org.jhotdraw.draw.action.arrange.*;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;

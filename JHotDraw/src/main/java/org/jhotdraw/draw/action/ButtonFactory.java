@@ -13,6 +13,7 @@
  */
 package org.jhotdraw.draw.action;
 
+import org.jhotdraw.draw.action.arrange.*;
 import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.gui.JPopupButton;
 import org.jhotdraw.util.*;

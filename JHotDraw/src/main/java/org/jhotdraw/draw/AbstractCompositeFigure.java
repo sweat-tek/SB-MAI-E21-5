@@ -24,6 +24,7 @@ import org.jhotdraw.geom.*;
 import org.jhotdraw.xml.DOMInput;
 import org.jhotdraw.xml.DOMOutput;
 import static org.jhotdraw.draw.AttributeKeys.*;
+import org.jhotdraw.draw.action.arrange.*;
 
 /**
  * AbstractCompositeFigure.
@@ -48,7 +49,7 @@ public abstract class AbstractCompositeFigure
      * @see #add
      * @see #removeChild
      */
-    protected ArrayList<Figure> children = new ArrayList<Figure>();
+    public ArrayList<Figure> children = new ArrayList<Figure>();
     /**
      * Cached draw cachedBounds.
      */
@@ -244,25 +245,19 @@ public abstract class AbstractCompositeFigure
     }
 
     /**
-     * Sends a figure to the back of the composite figure.
+     * Sends a figure to the front or back of the composite figure.
      *
      * @param figure that is part of this composite figure
+     * @param layer that the figure is moved to
      */
-    public synchronized void sendToBack(Figure figure) {
+    public synchronized void arrange(Figure figure, ArrangeLayer layer) {
         if (basicRemove(figure) != -1) {
-            basicAdd(0, figure);
-            fireAreaInvalidated(figure.getDrawingArea());
-        }
-    }
-
-    /**
-     * Sends a figure to the front of the drawing.
-     *
-     * @param figure that is part of the drawing
-     */
-    public synchronized void bringToFront(Figure figure) {
-        if (basicRemove(figure) != -1) {
-            basicAdd(figure);
+            if (layer == ArrangeLayer.FRONT) {
+                basicAdd(figure);
+            }
+            else {
+                basicAdd(0, figure);
+            }            
             fireAreaInvalidated(figure.getDrawingArea());
         }
     }
