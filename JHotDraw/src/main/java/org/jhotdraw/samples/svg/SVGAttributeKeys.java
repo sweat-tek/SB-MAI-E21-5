@@ -120,8 +120,9 @@ public class SVGAttributeKeys extends AttributeKeys {
     
     /**
      * Gets the fill paint for the specified figure based on the attributes
-     * FILL_GRADIENT, FILL_OPACITY, FILL_PAINT and the bounds of the figure.
-     * Returns new Color if the figure is not filled.
+     * FILL_GRADIENT, FILL_OPACITY, FILL_PAINT and the bounds of the figure.Returns new Color if the figure is not filled.
+     * @param f
+     * @return 
      */
     public static Paint getFillPaint(Figure f) {
         double opacity = FILL_OPACITY.get(f);
@@ -137,8 +138,9 @@ public class SVGAttributeKeys extends AttributeKeys {
     }
     /**
      * Gets the stroke paint for the specified figure based on the attributes
-     * STROKE_GRADIENT, STROKE_OPACITY, STROKE_PAINT and the bounds of the figure.
-     * Returns new Color if the figure is not filled.
+     * STROKE_GRADIENT, STROKE_OPACITY, STROKE_PAINT and the bounds of the figure.Returns new Color if the figure is not filled.
+     * @param f
+     * @return 
      */
     public static Paint getStrokePaint(Figure f) {
         double opacity = STROKE_OPACITY.get(f);
