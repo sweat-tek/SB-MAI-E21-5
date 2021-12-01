@@ -27,4 +27,4 @@ nb-configuration.xml
 /JHotDraw/nbproject/
 
 # VS Code
-./vscode
+.vscode/
