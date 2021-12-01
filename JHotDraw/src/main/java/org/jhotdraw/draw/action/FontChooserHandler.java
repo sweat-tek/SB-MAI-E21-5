@@ -14,32 +14,36 @@
 package org.jhotdraw.draw.action;
 
 import javax.swing.undo.*;
-import org.jhotdraw.app.action.Actions;
+import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.util.*;
 import java.awt.*;
 import java.beans.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.gui.JFontChooser;
-import org.jhotdraw.util.ResourceBundleUtil;
 
 /**
  * FontChooserHandler.
  *
- * @author Werner Randelshofer
- * @version 1.0 22.05.2008 Created.
+ * @author Werner Randelshofer  @version 1.0 22.05.2008 Created.
  */
-public class FontChooserHandler extends AbstractSelectedAction
-        implements PropertyChangeListener {
+public class FontChooserHandler extends AbstractSelectedAction implements PropertyChangeListener {
 
     protected AttributeKey<Font> key;
     protected JFontChooser fontChooser;
     protected JPopupMenu popupMenu;
     protected int isUpdating;
-    //protected Map<AttributeKey, Object> attributes;
 
-    /** Creates a new instance. */
-    public FontChooserHandler(DrawingEditor editor, AttributeKey<Font> key, JFontChooser fontChooser, JPopupMenu popupMenu) {
+    /**
+     * Creates a new instance.
+     * 
+     * @param editor
+     * @param key
+     * @param fontChooser
+     * @param popupMenu
+     */
+    public FontChooserHandler(DrawingEditor editor, AttributeKey<Font> key, JFontChooser fontChooser,
+            JPopupMenu popupMenu) {
         super(editor);
         this.key = key;
         this.fontChooser = fontChooser;
@@ -50,38 +54,59 @@ public class FontChooserHandler extends AbstractSelectedAction
         updateEnabledState();
     }
 
-    public void actionPerformed(java.awt.event.ActionEvent evt) {
-        if (evt.getActionCommand() == JFontChooser.APPROVE_SELECTION) {
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        if (evt.getActionCommand().equals(JFontChooser.APPROVE_SELECTION)) {
             applySelectedFontToFigures();
-        } else if (evt.getActionCommand() == JFontChooser.CANCEL_SELECTION) {
+        } else if (evt.getActionCommand().equals(JFontChooser.CANCEL_SELECTION)) {
+            // Do not do anything
         }
         popupMenu.setVisible(false);
     }
 
-    protected void applySelectedFontToFigures() {
+    /**
+     * Sets the selected font to the font of the selected figures
+     */
+    public void applySelectedFontToFigures() {
+
         final ArrayList<Figure> selectedFigures = new ArrayList<Figure>(getView().getSelectedFigures());
         final ArrayList<Object> restoreData = new ArrayList<Object>(selectedFigures.size());
+
         for (Figure figure : selectedFigures) {
             restoreData.add(figure.getAttributesRestoreData());
-            key.set(figure, fontChooser.getSelectedFont());
+            applyFontToFigure(figure, fontChooser.getSelectedFont());
         }
         getEditor().setDefaultAttribute(key, fontChooser.getSelectedFont());
         final Font undoValue = fontChooser.getSelectedFont();
-        UndoableEdit edit = new AbstractUndoableEdit() {
+        UndoableEdit edit = createUndoableEdit(undoValue, selectedFigures, restoreData);
+        fireUndoableEditHappened(edit);
+    }
+
+    /**
+     * Sets the font of the figure to the specified font.
+     * 
+     * @param figure
+     * @param font
+     */
+    public void applyFontToFigure(Figure figure, Font font) {
+        key.set(figure, font);
+    }
+
+    /**
+     * Creates an object to implement undo and redo functionality
+     * 
+     * @param undoValue
+     * @param selectedFigures
+     * @param restoreData
+     * @return
+     */
+    private AbstractUndoableEdit createUndoableEdit(Font undoValue, ArrayList<Figure> selectedFigures,
+            ArrayList<Object> restoreData) {
+        return new AbstractUndoableEdit() {
 
             @Override
             public String getPresentationName() {
                 return AttributeKeys.FONT_FACE.getPresentationName();
-                /*
-                String name = (String) getValue(Actions.UNDO_PRESENTATION_NAME_KEY);
-                if (name == null) {
-                    name = (String) getValue(AbstractAction.NAME);
-                }
-                if (name == null) {
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                    name = labels.getString("attribute.text");
-                }
-                return name;*/
             }
 
             @Override
@@ -106,7 +131,6 @@ public class FontChooserHandler extends AbstractSelectedAction
                 }
             }
         };
-        fireUndoableEditHappened(edit);
     }
 
     @Override
@@ -116,7 +140,7 @@ public class FontChooserHandler extends AbstractSelectedAction
             fontChooser.setEnabled(getView().getSelectionCount() > 0);
             popupMenu.setEnabled(getView().getSelectionCount() > 0);
             isUpdating++;
-            if (getView().getSelectionCount() > 0 /*&& fontChooser.isShowing()*/) {
+            if (getView().getSelectionCount() > 0) {
                 for (Figure f : getView().getSelectedFigures()) {
                     if (f instanceof TextHolderFigure) {
                         TextHolderFigure thf = (TextHolderFigure) f;
@@ -129,9 +153,10 @@ public class FontChooserHandler extends AbstractSelectedAction
         }
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (isUpdating++ == 0) {
-            if (evt.getPropertyName() == JFontChooser.SELECTED_FONT_PROPERTY) {
+            if (evt.getPropertyName().equals(JFontChooser.SELECTED_FONT_PROPERTY)) {
                 applySelectedFontToFigures();
             }
         }
