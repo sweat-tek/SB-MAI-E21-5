@@ -166,7 +166,6 @@ public class JFontChooser extends JComponent {
      * @return the PanelUI object that renders this component
      * @since 1.4
      */
-    @Override
     public FontChooserUI getUI() {
         return (FontChooserUI) ui;
     }
