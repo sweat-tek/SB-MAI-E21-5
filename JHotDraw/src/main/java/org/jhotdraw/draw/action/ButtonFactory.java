@@ -1300,7 +1300,7 @@ public class ButtonFactory {
         return fontPopupButton;
     }
     
-    public static JButton createFontStyleButton(DrawingEditor editor, ResourceBundleUtil labels, AttributeKey key, String label) {
+    public static JButton createFontStyleButton(DrawingEditor editor, ResourceBundleUtil labels, AttributeKey<Boolean> key, String label) {
         JButton btn = new JButton();
         labels.configureToolBarButton(btn, label);
         btn.setFocusable(false);
