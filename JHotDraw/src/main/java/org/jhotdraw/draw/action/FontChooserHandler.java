@@ -25,8 +25,7 @@ import org.jhotdraw.gui.JFontChooser;
 /**
  * FontChooserHandler.
  *
- * @author Werner Randelshofer
- * @version 1.0 22.05.2008 Created.
+ * @author Werner Randelshofer  @version 1.0 22.05.2008 Created.
  */
 public class FontChooserHandler extends AbstractSelectedAction implements PropertyChangeListener {
 
@@ -35,15 +34,16 @@ public class FontChooserHandler extends AbstractSelectedAction implements Proper
     protected JPopupMenu popupMenu;
     protected int isUpdating;
 
-    /** 
+    /**
      * Creates a new instance.
      * 
-     * @param editor 
-     * @param key 
-     * @param fontChooser 
-     * @param popupMenu 
+     * @param editor
+     * @param key
+     * @param fontChooser
+     * @param popupMenu
      */
-    public FontChooserHandler(DrawingEditor editor, AttributeKey<Font> key, JFontChooser fontChooser, JPopupMenu popupMenu) {
+    public FontChooserHandler(DrawingEditor editor, AttributeKey<Font> key, JFontChooser fontChooser,
+            JPopupMenu popupMenu) {
         super(editor);
         this.key = key;
         this.fontChooser = fontChooser;
@@ -54,7 +54,7 @@ public class FontChooserHandler extends AbstractSelectedAction implements Proper
         updateEnabledState();
     }
 
-    //@Override
+    @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getActionCommand().equals(JFontChooser.APPROVE_SELECTION)) {
             applySelectedFontToFigures();
@@ -63,34 +63,45 @@ public class FontChooserHandler extends AbstractSelectedAction implements Proper
         }
         popupMenu.setVisible(false);
     }
-    
+
     /**
      * Sets the selected font to the font of the selected figures
      */
-    protected void applySelectedFontToFigures() {
-        
+    public void applySelectedFontToFigures() {
+
         final ArrayList<Figure> selectedFigures = new ArrayList<Figure>(getView().getSelectedFigures());
         final ArrayList<Object> restoreData = new ArrayList<Object>(selectedFigures.size());
-        
+
         for (Figure figure : selectedFigures) {
             restoreData.add(figure.getAttributesRestoreData());
-            key.set(figure, fontChooser.getSelectedFont());
+            applyFontToFigure(figure, fontChooser.getSelectedFont());
         }
         getEditor().setDefaultAttribute(key, fontChooser.getSelectedFont());
         final Font undoValue = fontChooser.getSelectedFont();
         UndoableEdit edit = createUndoableEdit(undoValue, selectedFigures, restoreData);
         fireUndoableEditHappened(edit);
     }
-    
+
+    /**
+     * Sets the font of the figure to the specified font.
+     * 
+     * @param figure
+     * @param font
+     */
+    public void applyFontToFigure(Figure figure, Font font) {
+        key.set(figure, font);
+    }
+
     /**
      * Creates an object to implement undo and redo functionality
      * 
      * @param undoValue
      * @param selectedFigures
      * @param restoreData
-     * @return 
+     * @return
      */
-    private AbstractUndoableEdit createUndoableEdit(Font undoValue, ArrayList<Figure> selectedFigures, ArrayList<Object> restoreData) {
+    private AbstractUndoableEdit createUndoableEdit(Font undoValue, ArrayList<Figure> selectedFigures,
+            ArrayList<Object> restoreData) {
         return new AbstractUndoableEdit() {
 
             @Override
