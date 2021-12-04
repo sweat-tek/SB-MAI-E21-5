@@ -5,10 +5,14 @@
  */
 package org.jhotdraw.samples.svg.figures;
 
+import com.tngtech.jgiven.junit.ScenarioTest;
 import java.awt.Color;
 import java.awt.*;
 import org.jhotdraw.draw.AttributeKey;
 import org.jhotdraw.samples.svg.SVGAttributeKeys;
+import org.jhotdraw.samples.svg.figures.scenarioTest.GivenText;
+import org.jhotdraw.samples.svg.figures.scenarioTest.ThenTextShow;
+import org.jhotdraw.samples.svg.figures.scenarioTest.WhenChanged;
 import org.jhotdraw.util.ResourceBundleUtil;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -17,7 +21,7 @@ import static org.junit.Assert.*;
  *
  * @author lucas
  */
-public class SVGAttributeKeysTest {
+public class SVGAttributeKeysTest extends ScenarioTest<GivenText, WhenChanged, ThenTextShow> {
 
     private static ResourceBundleUtil labels;
 
@@ -84,4 +88,17 @@ public class SVGAttributeKeysTest {
         assertNotNull(paint);
     }
 
+    /* 
+    // Acceptance test
+    // Given i have a textFigure
+    // When the user makes a change to something in the textFigure
+    // Then the text is shown
+    */
+    @Test
+     public void user_can_add_text_to_figures() {
+        given().new_text_added();
+        when().the_user_change_textFigure();
+        then().textFigure_is_shown_without_any_null_exceptions();
+    }
+    
 }
