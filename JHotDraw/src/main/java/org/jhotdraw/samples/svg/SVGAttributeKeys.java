@@ -117,7 +117,7 @@ public class SVGAttributeKeys extends AttributeKeys {
      */
     public final static AttributeKey<String> LINK_TARGET = new AttributeKey<String>("linkTarget", String.class,null, true, labels);
     
-    // change made here 
+    
     /**
      * Gets the fill paint for the specified figure based on the attributes
      * FILL_GRADIENT, FILL_OPACITY, FILL_PAINT and the bounds of the figure.Returns new Color if the figure is not filled.
@@ -132,12 +132,10 @@ public class SVGAttributeKeys extends AttributeKeys {
         Color color = FILL_COLOR.get(f);
         // Change made here
         if (opacity != 1) {
-            color = new Color( 255, 255, 255, 255);
+            color = new Color((color.getRGB() & 0xffffff) | (int) (opacity * 255) << 24, true);
         }
         return color;
     }
-    
-    // change made here
     /**
      * Gets the stroke paint for the specified figure based on the attributes
      * STROKE_GRADIENT, STROKE_OPACITY, STROKE_PAINT and the bounds of the figure.Returns new Color if the figure is not filled.
@@ -152,7 +150,7 @@ public class SVGAttributeKeys extends AttributeKeys {
         Color color = STROKE_COLOR.get(f);
         // Change made here
         if (opacity != 1) {
-            color = new Color( 255, 255, 255, 255);
+            color = new Color((color.getRGB() & 0xffffff) | (int) (opacity * 255) << 24, true);
         }
         return color;
     }
