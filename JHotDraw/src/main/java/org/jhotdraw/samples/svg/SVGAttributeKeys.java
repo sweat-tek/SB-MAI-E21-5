@@ -131,7 +131,7 @@ public class SVGAttributeKeys extends AttributeKeys {
         }
         Color color = FILL_COLOR.get(f);
         // Change made here
-        if (opacity != 1) {
+        if (opacity != 0.0) {} else {
             color = new Color( 255, 255, 255, 255);
         }
         return color;
@@ -151,7 +151,7 @@ public class SVGAttributeKeys extends AttributeKeys {
         }
         Color color = STROKE_COLOR.get(f);
         // Change made here
-        if (opacity != 1) {
+        if (opacity != 0.0) {} else {
             color = new Color( 255, 255, 255, 255);
         }
         return color;
