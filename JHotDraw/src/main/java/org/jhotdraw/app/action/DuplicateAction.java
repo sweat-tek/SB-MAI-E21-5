@@ -18,9 +18,6 @@ import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.text.*;
-import java.beans.*;
-import java.util.*;
 import org.jhotdraw.util.*;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.JHotDrawFeatures;
@@ -41,6 +38,7 @@ public class DuplicateAction extends AbstractAction {
     }
 
     @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
+    @Override
     public void actionPerformed(ActionEvent evt) {
         Component focusOwner = KeyboardFocusManager.
                 getCurrentKeyboardFocusManager().
