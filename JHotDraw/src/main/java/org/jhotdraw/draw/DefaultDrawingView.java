@@ -23,7 +23,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.JHotDrawFeatures;
 import static org.jhotdraw.draw.AttributeKeys.*;
@@ -1012,24 +1011,25 @@ public class DefaultDrawingView
         t.translate(-translate.x, -translate.y);
         return t;
     }
-
-    @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
-    public void delete() {
-        final LinkedList<CompositeFigureEvent> deletionEvents = new LinkedList<CompositeFigureEvent>();
-        final java.util.List<Figure> deletedFigures = drawing.sort(getSelectedFigures());
-
+    
+    private boolean removable(java.util.List<Figure> deletedFigures) {
         // Abort, if not all of the selected figures may be removed from the
         // drawing
         for (Figure f : deletedFigures) {
             if (!f.isRemovable()) {
                 getToolkit().beep();
-                return;
-
+                return false;
             }
-
-
         }
+        return true;
+    }
 
+    @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
+    public void delete() {
+        final java.util.List<Figure> deletedFigures = drawing.sort(getSelectedFigures());
+
+        if(!removable(deletedFigures)) return;
+        
         // Get z-indices of deleted figures
         final int[] deletedFigureIndices = new int[deletedFigures.size()];
         for (int i = 0; i <
@@ -1077,11 +1077,11 @@ public class DefaultDrawingView
     @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
     public void duplicate() {
         Collection<Figure> sorted = getDrawing().sort(getSelectedFigures());
-        HashMap<Figure, Figure> originalToDuplicateMap = new HashMap<Figure, Figure>(sorted.size());
+        HashMap<Figure, Figure> originalToDuplicateMap = new HashMap<>(sorted.size());
 
         clearSelection();
 
-        final ArrayList<Figure> duplicates = new ArrayList<Figure>(sorted.size());
+        final ArrayList<Figure> duplicates = new ArrayList<>(sorted.size());
         AffineTransform tx = new AffineTransform();
         tx.translate(5, 5);
         for (Figure f : sorted) {
