@@ -1,5 +1,30 @@
+# Netbeans
+nbactions.xml
+nb-configuration.xml
+build/
+dist/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# Mac
+.DS_Store
+
+# Maven
 target/
 runner/
 FeatureTraces/
 nbactions.xml
 nb-configuration.xml
+/JHotDraw/nbproject/
+
+# VS Code
+.vscode/

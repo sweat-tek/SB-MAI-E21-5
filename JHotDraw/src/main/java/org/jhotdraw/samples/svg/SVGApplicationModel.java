@@ -13,6 +13,7 @@
  */
 package org.jhotdraw.samples.svg;
 
+import org.jhotdraw.draw.action.arrange.*;
 import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.DefaultApplicationModel;

@@ -24,6 +24,7 @@ import java.util.*;
 import javax.swing.undo.*;
 import javax.swing.event.*;
 import java.io.*;
+import org.jhotdraw.draw.action.arrange.*;
 /**
  * A drawing holds figures. It can draw its figures, and it can find
  * them on its drawing area.
@@ -245,18 +246,12 @@ public interface Drawing extends CompositeFigure, Serializable, DOMStorable {
     Figure findFigureInside(Point2D.Double p);
     
     /**
-     * Sends a figure to the back of the drawing.
+     * Sends a figure to the front or back of the drawing.
      *
      * @param figure that is part of the drawing
+     * @param layer that the figure is moved to
      */
-    void sendToBack(Figure figure);
-    
-    /**
-     * Brings a figure to the front.
-     *
-     * @param figure that is part of the drawing
-     */
-    void bringToFront(Figure figure);
+    void arrange(Figure figure, ArrangeLayer layer);
     
     /**
      * Returns a copy of the provided collection which is sorted
