@@ -998,7 +998,6 @@ public class DefaultDrawingView
 
         }
 
-
     }
 
     public int getHandleDetailLevel() {
@@ -1024,8 +1023,8 @@ public class DefaultDrawingView
         return true;
     }
     
-    private AbstractUndoableEdit undoDelete(List<Figure> deletedFigures, int[] deletedFigureIndices) {
-        AbstractUndoableEdit out = new AbstractUndoableEdit() {
+    private AbstractUndoableEdit undoRedoDelete(List<Figure> deletedFigures, int[] deletedFigureIndices) {
+        return new AbstractUndoableEdit() {
         @Override
             public String getPresentationName() {
                 ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
@@ -1053,7 +1052,6 @@ public class DefaultDrawingView
                 }
             }
         };
-        return out;
     }
     
     @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
@@ -1072,9 +1070,32 @@ public class DefaultDrawingView
         clearSelection();
         getDrawing().removeAll(deletedFigures);
 
-        getDrawing().fireUndoableEditHappened(undoDelete(deletedFigures, deletedFigureIndices));
+        getDrawing().fireUndoableEditHappened(undoRedoDelete(deletedFigures, deletedFigureIndices));
     }
+    
+    private AbstractUndoableEdit undoRedoDuplicate(ArrayList<Figure> duplicates) {
+        return new AbstractUndoableEdit() {
 
+            @Override
+            public String getPresentationName() {
+                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                return labels.getString("edit.duplicate.text");
+            }
+
+            @Override
+            public void undo() throws CannotUndoException {
+                super.undo();
+                getDrawing().removeAll(duplicates);
+            }
+
+            @Override
+            public void redo() throws CannotRedoException {
+                super.redo();
+                getDrawing().addAll(duplicates);
+            }
+        };
+    }
+    
     @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
     public void duplicate() {
         Collection<Figure> sorted = getDrawing().sort(getSelectedFigures());
@@ -1099,26 +1120,7 @@ public class DefaultDrawingView
 
         addToSelection(duplicates);
 
-        getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
-
-            @Override
-            public String getPresentationName() {
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                return labels.getString("edit.duplicate.text");
-            }
-
-            @Override
-            public void undo() throws CannotUndoException {
-                super.undo();
-                getDrawing().removeAll(duplicates);
-            }
-
-            @Override
-            public void redo() throws CannotRedoException {
-                super.redo();
-                getDrawing().addAll(duplicates);
-            }
-        });
+        getDrawing().fireUndoableEditHappened(undoRedoDuplicate(duplicates));
     }
 
     public void removeNotify(DrawingEditor editor) {
