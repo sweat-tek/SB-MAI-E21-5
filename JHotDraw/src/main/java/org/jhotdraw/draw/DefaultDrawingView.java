@@ -26,7 +26,7 @@ import javax.swing.*;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.JHotDrawFeatures;
 import static org.jhotdraw.draw.AttributeKeys.*;
-
+import java.util.List;
 /**
  * The DefaultDrawingView is suited for viewing drawings with a small number
  * of Figures.
@@ -627,7 +627,7 @@ public class DefaultDrawingView
     /**
      * Gets the currently active selection handles.
      */
-    private java.util.List<Handle> getSelectionHandles() {
+    private List<Handle> getSelectionHandles() {
         validateHandles();
         return Collections.unmodifiableList(selectionHandles);
     }
@@ -635,7 +635,7 @@ public class DefaultDrawingView
     /**
      * Gets the currently active secondary handles.
      */
-    private java.util.List<Handle> getSecondaryHandles() {
+    private List<Handle> getSecondaryHandles() {
         validateHandles();
         return Collections.unmodifiableList(secondaryHandles);
     }
@@ -1012,7 +1012,7 @@ public class DefaultDrawingView
         return t;
     }
     
-    private boolean removable(java.util.List<Figure> deletedFigures) {
+    private boolean removable(List<Figure> deletedFigures) {
         // Abort, if not all of the selected figures may be removed from the
         // drawing
         for (Figure f : deletedFigures) {
@@ -1023,10 +1023,42 @@ public class DefaultDrawingView
         }
         return true;
     }
+    
+    private AbstractUndoableEdit undoDelete(List<Figure> deletedFigures, int[] deletedFigureIndices) {
+        AbstractUndoableEdit out = new AbstractUndoableEdit() {
+        @Override
+            public String getPresentationName() {
+                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
+                return labels.getString("edit.delete.text");
+            }
 
+            @Override
+            public void undo() throws CannotUndoException {
+                super.undo();
+                clearSelection();
+                Drawing d = getDrawing();
+                for (int i = 0; i <
+                        deletedFigureIndices.length; i++) {
+                    d.add(deletedFigureIndices[i], deletedFigures.get(i));
+                }
+                addToSelection(deletedFigures);
+            }
+
+            @Override
+            public void redo() throws CannotRedoException {
+                super.redo();
+                for (int i = 0; i <
+                        deletedFigureIndices.length; i++) {
+                    drawing.remove(deletedFigures.get(i));
+                }
+            }
+        };
+        return out;
+    }
+    
     @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
     public void delete() {
-        final java.util.List<Figure> deletedFigures = drawing.sort(getSelectedFigures());
+        final List<Figure> deletedFigures = drawing.sort(getSelectedFigures());
 
         if(!removable(deletedFigures)) return;
         
@@ -1040,38 +1072,7 @@ public class DefaultDrawingView
         clearSelection();
         getDrawing().removeAll(deletedFigures);
 
-        getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
-
-            @Override
-            public String getPresentationName() {
-                ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
-                return labels.getString("edit.delete.text");
-            }
-
-            @Override
-            public void undo() throws CannotUndoException {
-                super.undo();
-                clearSelection();
-
-                Drawing d = getDrawing();
-                for (int i = 0; i <
-                        deletedFigureIndices.length; i++) {
-                    d.add(deletedFigureIndices[i], deletedFigures.get(i));
-                }
-
-                addToSelection(deletedFigures);
-            }
-
-            @Override
-            public void redo() throws CannotRedoException {
-                super.redo();
-                for (int i = 0; i <
-                        deletedFigureIndices.length; i++) {
-                    drawing.remove(deletedFigures.get(i));
-                }
-
-            }
-        });
+        getDrawing().fireUndoableEditHappened(undoDelete(deletedFigures, deletedFigureIndices));
     }
 
     @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
