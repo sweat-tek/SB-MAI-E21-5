@@ -40,6 +40,7 @@ public class SelectAllAction extends AbstractAction {
         labels.configureAction(this, ID);
     }
 
+    // Duplicate code - Won't be modified but could be changed
     @FeatureEntryPoint(JHotDrawFeatures.AUTOMATIC_SELECTION)
     public void actionPerformed(ActionEvent evt) {
         Component focusOwner = KeyboardFocusManager.

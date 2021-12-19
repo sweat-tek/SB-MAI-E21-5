@@ -820,6 +820,10 @@ public class Geom {
         r.width += h * 2d;
         r.height += v * 2d;
     }
+    
+    public static void grow(Rectangle2D.Double r, Dimension2DDouble dimensions) {
+        grow(r, dimensions.width, dimensions.height);
+    }
 
     /**
      * Returns true, if rectangle 1 contains rectangle 2.

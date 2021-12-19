@@ -22,6 +22,7 @@ import org.jhotdraw.util.*;
 import java.util.*;
 import org.jhotdraw.app.JHotDrawFeatures;
 import org.jhotdraw.geom.Geom;
+import org.jhotdraw.draw.action.arrange.*;
 
 /**
  * QuadTreeDrawing uses a QuadTree2DDouble to improve responsiveness of drawings
@@ -190,36 +191,6 @@ public class QuadTreeDrawing extends AbstractDrawing {
         }
     }
 
-    public Figure findFigureBehind(Point2D.Double p, Figure figure) {
-        boolean isBehind = false;
-        for (Figure f : getFiguresFrontToBack()) {
-            if (isBehind) {
-                if (f.isVisible() && f.contains(p)) {
-                    return f;
-                }
-            } else {
-                isBehind = figure == f;
-            }
-        }
-        return null;
-    }
-
-    public Figure findFigureBehind(Point2D.Double p, Collection<? extends Figure> children) {
-        int inFrontOf = children.size();
-        for (Figure f : getFiguresFrontToBack()) {
-            if (inFrontOf == 0) {
-                if (f.isVisible() && f.contains(p)) {
-                    return f;
-                }
-            } else {
-                if (children.contains(f)) {
-                    inFrontOf--;
-                }
-            }
-        }
-        return null;
-    }
-
     public java.util.List<Figure> findFigures(Rectangle2D.Double r) {
         LinkedList<Figure> c = new LinkedList<Figure>(quadTree.findIntersects(r));
         switch (c.size()) {
@@ -246,22 +217,17 @@ public class QuadTreeDrawing extends AbstractDrawing {
         }
         return contained;
     }
-
+    
     @Override
     @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
-    public void bringToFront(Figure figure) {
+    public void arrange(Figure figure, ArrangeLayer layer) {
         if (children.remove(figure)) {
-            children.add(figure);
-            needsSorting = true;
-            fireAreaInvalidated(figure.getDrawingArea());
-        }
-    }
-
-    @Override
-    @FeatureEntryPoint(JHotDrawFeatures.ARRANGE)
-    public void sendToBack(Figure figure) {
-        if (children.remove(figure)) {
-            children.add(0, figure);
+            if (layer == ArrangeLayer.FRONT) {
+                children.add(figure);
+            }
+            else {
+                children.add(0, figure);
+            }            
             needsSorting = true;
             fireAreaInvalidated(figure.getDrawingArea());
         }
