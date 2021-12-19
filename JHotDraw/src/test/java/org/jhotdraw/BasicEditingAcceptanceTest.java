@@ -27,7 +27,7 @@ public class BasicEditingAcceptanceTest extends ScenarioTest<GivenFigures, WhenE
         given().oneSelectedFigure()
                 .and().oneUnselectedFigure();
         when().deletingFigures();
-        then().figuresAreDeleted();
+        then().onlySelectedFiguresAreDeleted();
     }
     
     @Test
@@ -43,6 +43,6 @@ public class BasicEditingAcceptanceTest extends ScenarioTest<GivenFigures, WhenE
         given().twoSelectedFigures()
                 .and().twoUnselectedFigures();
         when().deletingFigures();
-        then().figuresAreDeleted();
+        then().onlySelectedFiguresAreDeleted();
     }
 }
