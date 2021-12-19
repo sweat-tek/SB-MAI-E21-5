@@ -23,11 +23,10 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import org.jhotdraw.app.EditableComponent;
 import org.jhotdraw.app.JHotDrawFeatures;
 import static org.jhotdraw.draw.AttributeKeys.*;
-
+import java.util.List;
 /**
  * The DefaultDrawingView is suited for viewing drawings with a small number
  * of Figures.
@@ -628,7 +627,7 @@ public class DefaultDrawingView
     /**
      * Gets the currently active selection handles.
      */
-    private java.util.List<Handle> getSelectionHandles() {
+    private List<Handle> getSelectionHandles() {
         validateHandles();
         return Collections.unmodifiableList(selectionHandles);
     }
@@ -636,7 +635,7 @@ public class DefaultDrawingView
     /**
      * Gets the currently active secondary handles.
      */
-    private java.util.List<Handle> getSecondaryHandles() {
+    private List<Handle> getSecondaryHandles() {
         validateHandles();
         return Collections.unmodifiableList(secondaryHandles);
     }
@@ -999,7 +998,6 @@ public class DefaultDrawingView
 
         }
 
-
     }
 
     public int getHandleDetailLevel() {
@@ -1012,37 +1010,22 @@ public class DefaultDrawingView
         t.translate(-translate.x, -translate.y);
         return t;
     }
-
-    @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
-    public void delete() {
-        final LinkedList<CompositeFigureEvent> deletionEvents = new LinkedList<CompositeFigureEvent>();
-        final java.util.List<Figure> deletedFigures = drawing.sort(getSelectedFigures());
-
+    
+    private boolean removable(List<Figure> deletedFigures) {
         // Abort, if not all of the selected figures may be removed from the
         // drawing
         for (Figure f : deletedFigures) {
             if (!f.isRemovable()) {
                 getToolkit().beep();
-                return;
-
+                return false;
             }
-
-
         }
-
-        // Get z-indices of deleted figures
-        final int[] deletedFigureIndices = new int[deletedFigures.size()];
-        for (int i = 0; i <
-                deletedFigureIndices.length; i++) {
-            deletedFigureIndices[i] = drawing.indexOf(deletedFigures.get(i));
-        }
-
-        clearSelection();
-        getDrawing().removeAll(deletedFigures);
-
-        getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
-
-            @Override
+        return true;
+    }
+    
+    private AbstractUndoableEdit undoRedoDelete(List<Figure> deletedFigures, int[] deletedFigureIndices) {
+        return new AbstractUndoableEdit() {
+        @Override
             public String getPresentationName() {
                 ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.draw.Labels");
                 return labels.getString("edit.delete.text");
@@ -1052,13 +1035,11 @@ public class DefaultDrawingView
             public void undo() throws CannotUndoException {
                 super.undo();
                 clearSelection();
-
                 Drawing d = getDrawing();
                 for (int i = 0; i <
                         deletedFigureIndices.length; i++) {
                     d.add(deletedFigureIndices[i], deletedFigures.get(i));
                 }
-
                 addToSelection(deletedFigures);
             }
 
@@ -1069,36 +1050,31 @@ public class DefaultDrawingView
                         deletedFigureIndices.length; i++) {
                     drawing.remove(deletedFigures.get(i));
                 }
-
             }
-        });
+        };
     }
-
+    
     @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
-    public void duplicate() {
-        Collection<Figure> sorted = getDrawing().sort(getSelectedFigures());
-        HashMap<Figure, Figure> originalToDuplicateMap = new HashMap<Figure, Figure>(sorted.size());
+    public void delete() {
+        final List<Figure> deletedFigures = drawing.sort(getSelectedFigures());
+
+        if(!removable(deletedFigures)) return;
+        
+        // Get z-indices of deleted figures
+        final int[] deletedFigureIndices = new int[deletedFigures.size()];
+        for (int i = 0; i <
+                deletedFigureIndices.length; i++) {
+            deletedFigureIndices[i] = drawing.indexOf(deletedFigures.get(i));
+        }
 
         clearSelection();
+        getDrawing().removeAll(deletedFigures);
 
-        final ArrayList<Figure> duplicates = new ArrayList<Figure>(sorted.size());
-        AffineTransform tx = new AffineTransform();
-        tx.translate(5, 5);
-        for (Figure f : sorted) {
-            Figure d = (Figure) f.clone();
-            d.transform(tx);
-            duplicates.add(d);
-            originalToDuplicateMap.put(f, d);
-            drawing.add(d);
-        }
-
-        for (Figure f : duplicates) {
-            f.remap(originalToDuplicateMap, false);
-        }
-
-        addToSelection(duplicates);
-
-        getDrawing().fireUndoableEditHappened(new AbstractUndoableEdit() {
+        getDrawing().fireUndoableEditHappened(undoRedoDelete(deletedFigures, deletedFigureIndices));
+    }
+    
+    private AbstractUndoableEdit undoRedoDuplicate(ArrayList<Figure> duplicates) {
+        return new AbstractUndoableEdit() {
 
             @Override
             public String getPresentationName() {
@@ -1117,7 +1093,34 @@ public class DefaultDrawingView
                 super.redo();
                 getDrawing().addAll(duplicates);
             }
-        });
+        };
+    }
+    
+    @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
+    public void duplicate() {
+        Collection<Figure> sorted = getDrawing().sort(getSelectedFigures());
+        HashMap<Figure, Figure> originalToDuplicateMap = new HashMap<>(sorted.size());
+
+        clearSelection();
+
+        final ArrayList<Figure> duplicates = new ArrayList<>(sorted.size());
+        AffineTransform tx = new AffineTransform();
+        tx.translate(5, 5);
+        for (Figure f : sorted) {
+            Figure d = (Figure) f.clone();
+            d.transform(tx);
+            duplicates.add(d);
+            originalToDuplicateMap.put(f, d);
+            drawing.add(d);
+        }
+
+        for (Figure f : duplicates) {
+            f.remap(originalToDuplicateMap, false);
+        }
+
+        addToSelection(duplicates);
+
+        getDrawing().fireUndoableEditHappened(undoRedoDuplicate(duplicates));
     }
 
     public void removeNotify(DrawingEditor editor) {
