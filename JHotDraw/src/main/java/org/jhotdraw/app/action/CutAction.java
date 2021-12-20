@@ -15,9 +15,7 @@
 package org.jhotdraw.app.action;
 
 import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
-import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import org.jhotdraw.app.JHotDrawFeatures;
 import org.jhotdraw.util.*;
 /**
@@ -30,7 +28,7 @@ import org.jhotdraw.util.*;
  * interface EditableComponent. 
  * <br>1.0 October 9, 2005 Created.
  */
-public class CutAction extends AbstractAction {
+public class CutAction extends ClipboardAction {
     public final static String ID = "edit.cut";
    
     /** Creates a new instance. */
@@ -40,17 +38,8 @@ public class CutAction extends AbstractAction {
     }
 
     @FeatureEntryPoint(JHotDrawFeatures.BASIC_EDITING)
+    @Override
     public void actionPerformed(ActionEvent evt) {
-        Component focusOwner = KeyboardFocusManager.
-                getCurrentKeyboardFocusManager().
-                getPermanentFocusOwner();
-        if (focusOwner != null && focusOwner instanceof JComponent) {
-            JComponent component = (JComponent) focusOwner;
-            component.getTransferHandler().exportToClipboard(
-                    component,
-                    component.getToolkit().getSystemClipboard(),
-                    TransferHandler.MOVE
-                    );
-        }
+        super.copy(true);
     }
 }
