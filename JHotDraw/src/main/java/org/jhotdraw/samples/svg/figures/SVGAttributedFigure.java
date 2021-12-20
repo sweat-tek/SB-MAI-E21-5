@@ -132,4 +132,37 @@ public abstract class SVGAttributedFigure extends AbstractAttributedFigure {
     @Override final public void read(DOMInput in) throws IOException {
         throw new UnsupportedOperationException("Use SVGStorableInput to read this Figure.");
     }
+    
+       public void superTransform(AffineTransform tx, SVGAttributedFigure fig) {
+        if (TRANSFORM.get(this) != null ||
+                (tx.getType() & (AffineTransform.TYPE_TRANSLATION)) != tx.getType()) {
+            if (TRANSFORM.get(this) == null && fig instanceof SVGRectFigure){
+                TRANSFORM.basicSet(this, (AffineTransform) tx.clone());
+            } else if(TRANSFORM.get(this) == null && fig instanceof SVGEllipseFigure) {
+                TRANSFORM.basicSetClone(this, tx);
+            } else {
+                AffineTransform t = TRANSFORM.getClone(this);
+                t.preConcatenate(tx);
+                TRANSFORM.basicSet(this, t);
+            }
+        } else {
+            Point2D.Double anchor = getStartPoint();
+            Point2D.Double lead = getEndPoint();
+            setBounds(
+                    (Point2D.Double) tx.transform(anchor, anchor),
+                    (Point2D.Double) tx.transform(lead, lead));
+            if (FILL_GRADIENT.get(this) != null &&
+                    !FILL_GRADIENT.get(this).isRelativeToFigureBounds()) {
+                Gradient g = FILL_GRADIENT.getClone(this);
+                g.transform(tx);
+                FILL_GRADIENT.basicSet(this, g);
+            }
+            if (STROKE_GRADIENT.get(this) != null &&
+                    !STROKE_GRADIENT.get(this).isRelativeToFigureBounds()) {
+                Gradient g = STROKE_GRADIENT.getClone(this);
+                g.transform(tx);
+                STROKE_GRADIENT.basicSet(this, g);
+            }
+        }
+    }
 }
