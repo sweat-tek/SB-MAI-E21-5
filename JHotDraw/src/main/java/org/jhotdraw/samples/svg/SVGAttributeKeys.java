@@ -117,11 +117,12 @@ public class SVGAttributeKeys extends AttributeKeys {
      */
     public final static AttributeKey<String> LINK_TARGET = new AttributeKey<String>("linkTarget", String.class,null, true, labels);
     
-    
+    // change made here
     /**
      * Gets the fill paint for the specified figure based on the attributes
-     * FILL_GRADIENT, FILL_OPACITY, FILL_PAINT and the bounds of the figure.
-     * Returns null if the figure is not filled.
+     * FILL_GRADIENT, FILL_OPACITY, FILL_PAINT and the bounds of the figure.Returns new Color if the figure is not filled.
+     * @param f
+     * @return 
      */
     public static Paint getFillPaint(Figure f) {
         double opacity = FILL_OPACITY.get(f);
@@ -129,19 +130,19 @@ public class SVGAttributeKeys extends AttributeKeys {
             return FILL_GRADIENT.get(f).getPaint(f, opacity);
         }
         Color color = FILL_COLOR.get(f);
-        if (color != null) {
-            if (opacity != 1) {
-                color = new Color(
-                        (color.getRGB() & 0xffffff) | (int) (opacity * 255) << 24,
-                        true);
-            }
+        // Change made here
+        if (opacity != 0.0) {} else {
+            color = new Color( 255, 255, 255, 255);
         }
         return color;
     }
+    
+    // change made here
     /**
      * Gets the stroke paint for the specified figure based on the attributes
-     * STROKE_GRADIENT, STROKE_OPACITY, STROKE_PAINT and the bounds of the figure.
-     * Returns null if the figure is not filled.
+     * STROKE_GRADIENT, STROKE_OPACITY, STROKE_PAINT and the bounds of the figure.Returns new Color if the figure is not filled.
+     * @param f
+     * @return 
      */
     public static Paint getStrokePaint(Figure f) {
         double opacity = STROKE_OPACITY.get(f);
@@ -149,12 +150,9 @@ public class SVGAttributeKeys extends AttributeKeys {
             return STROKE_GRADIENT.get(f).getPaint(f, opacity);
         }
         Color color = STROKE_COLOR.get(f);
-        if (color != null) {
-            if (opacity != 1) {
-                color = new Color(
-                        (color.getRGB() & 0xffffff) | (int) (opacity * 255) << 24,
-                        true);
-            }
+        // Change made here
+        if (opacity != 0.0) {} else {
+            color = new Color( 255, 255, 255, 255);
         }
         return color;
     }
