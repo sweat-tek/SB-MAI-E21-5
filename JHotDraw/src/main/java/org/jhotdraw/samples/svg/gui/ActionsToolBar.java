@@ -81,52 +81,18 @@ public class ActionsToolBar extends AbstractToolBar {
                 p.setOpaque(false);
                 p.setBorder(new EmptyBorder(5, 5, 5, 8));
 
-                Preferences prefs = Preferences.userNodeForPackage(getClass());
-
                 ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
 
                 GridBagLayout layout = new GridBagLayout();
                 p.setLayout(layout);
 
                 GridBagConstraints gbc;
-                AbstractButton btn;
 
-                btn = new JButton(undoManager.getUndoAction());
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                btn.setText(null);
-                labels.configureToolBarButton(btn, "edit.undo");
-                btn.putClientProperty("hideActionText", Boolean.TRUE);
-                gbc = new GridBagConstraints();
-                gbc.gridy = 0;
-                gbc.gridx = 0;
-                p.add(btn, gbc);
-
-                btn = new JButton(undoManager.getRedoAction());
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                btn.setText(null);
-                labels.configureToolBarButton(btn, "edit.redo");
-                btn.putClientProperty("hideActionText", Boolean.TRUE);
-                gbc = new GridBagConstraints();
-                gbc.gridy = 0;
-                gbc.insets = new Insets(0, 3, 0, 0);
-                p.add(btn, gbc);
-
-
-                btn = ButtonFactory.createPickAttributesButton(editor);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                labels.configureToolBarButton(btn, "attributesPick");
-                gbc = new GridBagConstraints();
-                gbc.gridy = 1;
-                gbc.insets = new Insets(3, 0, 0, 0);
-                p.add(btn, gbc);
-
-                btn = ButtonFactory.createApplyAttributesButton(editor);
-                btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                labels.configureToolBarButton(btn, "attributesApply");
-                gbc = new GridBagConstraints();
-                gbc.gridy = 1;
-                gbc.insets = new Insets(3, 3, 0, 0);
-                p.add(btn, gbc);
+                jButtonCreate(labels, p, 1);
+                jButtonCreate(labels, p, 2);
+                
+                buttonFactoryCreate(labels, p, 1);
+                buttonFactoryCreate(labels, p, 2);
 
                 JPopupButton pb = new JPopupButton();
                 pb.setUI((PaletteButtonUI) PaletteButtonUI.createUI(pb));
@@ -154,6 +120,69 @@ public class ActionsToolBar extends AbstractToolBar {
         return p;
     }
 
+    private void jButtonCreate(ResourceBundleUtil labels, JPanel p, int action){
+        GridBagConstraints gbc;
+        AbstractButton btn;
+        switch(action){
+            case 1:
+                btn = new JButton(undoManager.getUndoAction());
+                labels.configureToolBarButton(btn, "edit.undo");
+                break; 
+            case 2:
+                btn = new JButton(undoManager.getRedoAction());
+                labels.configureToolBarButton(btn, "edit.redo");
+                break; 
+            default:
+                return; 
+        }
+        btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
+        btn.setText(null);
+        btn.putClientProperty("hideActionText", Boolean.TRUE);
+        gbc = new GridBagConstraints();
+        gbc.gridy = 0;
+        switch(action){
+            case 1:
+                gbc.gridx = 0;
+                break; 
+            case 2:
+                gbc.insets = new Insets(0, 3, 0, 0);
+                break; 
+            default:
+                return; 
+        }
+        p.add(btn, gbc);
+    }
+    
+    private void buttonFactoryCreate(ResourceBundleUtil labels, JPanel p, int action){
+        GridBagConstraints gbc;
+        AbstractButton btn;
+        switch(action){
+            case 1:
+                btn = ButtonFactory.createPickAttributesButton(editor);
+                break; 
+            case 2:
+                btn = ButtonFactory.createApplyAttributesButton(editor);
+                break; 
+            default:
+                return; 
+        }
+        btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
+        labels.configureToolBarButton(btn, "attributesPick");
+        gbc = new GridBagConstraints();
+        gbc.gridy = 1;
+        switch(action){
+            case 1:
+                gbc.insets = new Insets(3, 0, 0, 0);
+                break; 
+            case 2:
+                gbc.insets = new Insets(3, 3, 0, 0);
+                break; 
+            default:
+                return; 
+        }
+        p.add(btn, gbc);
+    }
+    
     public ToggleGridAction getToggleGridAction() {
         return toggleGridAction;
     }
