@@ -74,7 +74,6 @@ public class ActionsToolBar extends AbstractToolBar {
     @Override
     protected JComponent createDisclosedComponent(int state) {
         JPanel p = null;
-
         switch (state) {
             case 1: {
                 p = new JPanel();
@@ -87,7 +86,7 @@ public class ActionsToolBar extends AbstractToolBar {
                 p.setLayout(layout);
 
                 GridBagConstraints gbc;
-
+                
                 jButtonCreate(labels, p, 1);
                 jButtonCreate(labels, p, 2);
                 
@@ -120,9 +119,9 @@ public class ActionsToolBar extends AbstractToolBar {
         return p;
     }
 
-    private void jButtonCreate(ResourceBundleUtil labels, JPanel p, int action){
-        GridBagConstraints gbc;
-        AbstractButton btn;
+    protected JPanel jButtonCreate(ResourceBundleUtil labels, JPanel p, int action){
+        GridBagConstraints gbc = null;
+        AbstractButton btn = null;
         switch(action){
             case 1:
                 btn = new JButton(undoManager.getUndoAction());
@@ -133,7 +132,7 @@ public class ActionsToolBar extends AbstractToolBar {
                 labels.configureToolBarButton(btn, "edit.redo");
                 break; 
             default:
-                return; 
+                return null; 
         }
         btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
         btn.setText(null);
@@ -148,12 +147,13 @@ public class ActionsToolBar extends AbstractToolBar {
                 gbc.insets = new Insets(0, 3, 0, 0);
                 break; 
             default:
-                return; 
+                return null; 
         }
         p.add(btn, gbc);
+        return p;
     }
     
-    private void buttonFactoryCreate(ResourceBundleUtil labels, JPanel p, int action){
+    protected JPanel buttonFactoryCreate(ResourceBundleUtil labels, JPanel p, int action){
         GridBagConstraints gbc;
         AbstractButton btn;
         switch(action){
@@ -164,7 +164,7 @@ public class ActionsToolBar extends AbstractToolBar {
                 btn = ButtonFactory.createApplyAttributesButton(editor);
                 break; 
             default:
-                return; 
+                return null; 
         }
         btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
         labels.configureToolBarButton(btn, "attributesPick");
@@ -178,9 +178,10 @@ public class ActionsToolBar extends AbstractToolBar {
                 gbc.insets = new Insets(3, 3, 0, 0);
                 break; 
             default:
-                return; 
+                return null; 
         }
         p.add(btn, gbc);
+        return p;
     }
     
     public ToggleGridAction getToggleGridAction() {
