@@ -164,6 +164,10 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         public void setMask(int newValue) {
             mask = newValue;
         }
+        
+        public boolean isCurved(int nodeMask){
+            return (this.mask & nodeMask) != 0;
+        }
 
         public void setControlPoint(int index, Point2D.Double p) {
             x[index] = p.x;
@@ -505,23 +509,23 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                 coords = new Coords(0.0f, 0.0f, 0.0f, 0.0f);
             } else {
                 // handle first node
-                Node node = get(0);                
+                Node node = get(0); 
                 coords = new Coords(node.x[0], node.y[0], node.x[0], node.y[0]);
                 
-                if (isClosed && (node.mask & C1_MASK) != 0) {
+                if (isClosed && node.isCurved(C1_MASK)) {
                     coords.handleBounds(node.x[1], node.y[1]);
                 }
-                if ((node.mask & C2_MASK) != 0) {
+                if (node.isCurved(C2_MASK)) {
                     coords.handleBounds(node.x[2], node.y[2]);
                 }
                 
                 // handle last node
                 node = get(size - 1);
                 coords.handleBounds(node.x[0], node.y[0]);
-                if ((node.mask & C1_MASK) != 0) {
+                if (node.isCurved(C1_MASK)) {
                     coords.handleBounds(node.x[1], node.y[1]);
                 }
-                if (isClosed && (node.mask & C2_MASK) != 0) {
+                if (isClosed && node.isCurved(C2_MASK)) {
                     coords.handleBounds(node.x[2], node.y[2]);
                 }
 
@@ -530,10 +534,10 @@ public class BezierPath extends ArrayList<BezierPath.Node>
                     node = get(i);
                     coords.handleBounds(node.x[0], node.y[0]);
                     
-                    if ((node.mask & C1_MASK) != 0) {
+                    if (node.isCurved(C1_MASK)) {
                         coords.handleBounds(node.x[1], node.y[1]);
                     }
-                    if ((node.mask & C2_MASK) != 0) {
+                    if (node.isCurved(C2_MASK)) {
                         coords.handleBounds(node.x[2], node.y[2]);
                     }
                 }
@@ -542,7 +546,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
         }
         return (Rectangle2D.Double) bounds.clone();
     }
-
+    
     public Rectangle getBounds() {
         return getBounds2D().getBounds();
     }
