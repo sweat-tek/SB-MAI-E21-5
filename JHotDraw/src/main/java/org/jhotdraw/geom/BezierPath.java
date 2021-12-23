@@ -488,6 +488,10 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             this.y2 = y2;
         }
         
+        public Coords(){
+            x1 = y1 = x2 = y2 = 0.0f;
+        }
+        
         public double getX1() {return x1;}
         public double getY1() {return y1;}
         public double getX2() {return x2;}
@@ -506,7 +510,7 @@ public class BezierPath extends ArrayList<BezierPath.Node>
             Coords coords;
             int size = size();
             if (size == 0) {
-                coords = new Coords(0.0f, 0.0f, 0.0f, 0.0f);
+                coords = new Coords();
             } else {
                 // handle first node
                 Node node = get(0); 
